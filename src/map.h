@@ -1,46 +1,19 @@
 #ifndef GUARD_MAP_H
 #define GUARD_MAP_H
 
-#include "explore.h" /*explorer*/
+#include <stddef.h> /*size_t*/
+#include <stdio.h> /*FILE*/
+
+#include "explore.h" /*status*/
+#include "treasure.h" /*treasure*/
 
 /********************
 Type declarations
 ********************/
-struct treasure;
 
 /********************
 Type definitions
 ********************/
-
-/*
-PURPOSE: Represent the type of the treasure compare function.
-IMPLEMENTATION: Typedef of function pointer.
-USAGE: Compares the gear with the persons corresponding gear,
-    and swap them if the persons gear is worse.
-*/
-typedef void (*compare_func)(treasure* gear, explorer* person);
-
-/*
-PURPOSE: Stores information about a treasure.
-IMPLEMENTATION: Struct containing the type of treasure:
-    'C': Coins
-    'M': Magic
-    'G': Gear
-    'N': None
-
-    Value: The value of the treasure (invalid for type='N')
-    Detail: A string description of the treasure (invalid for type='N' or 'C')
-    Compare: A function pointer for comparison and swapping of the gear.
-    (only valid for type='G')
-USAGE: Owned by either the map or explorer.
-*/
-typedef struct
-{
-    char type;
-    int value;
-    compare_func compare;
-    char* detail;
-} treasure;
 
 /*
 PURPOSE: Stores information about the map.
@@ -52,5 +25,31 @@ typedef treasure** map;
 /********************
 Function declarations
 ********************/
+
+/*
+PURPOSE: Reads in a map from a file.
+USAGE: Imports filename. Exports read_into, rows, cols, and status.
+    If an error was encountered, it is written to stderr and the returned status is
+    ABORTED. Otherwise, the returned status is COMPLETE.
+    Use free_map(map, size_t) to free the data after use.
+*/
+status read_map(map* read_into, size_t* rows, size_t* cols, char* filename);
+
+/*
+PURPOSE: Dynamically allocates a map (2d array of treasure).
+USAGE: Returns a dynamically allocated map. If map==NULL, allocation failed.
+*/
+map allocate_map(size_t rows, size_t cols);
+
+/*
+PURPOSE: Fills a map with information from a file.
+USAGE: Imports rows, cols, and file. Exports read_into and status.
+    Assumes that read_into has already been allocated correctly and
+        file is not null.
+    If any errors or invalid rows are encountered,
+        an error message is written to stderr and the returned status is ABORTED.
+    Otherwise, the returned status is COMPLETE.
+*/
+status fill_map(map read_into, size_t rows, size_t cols, FILE* file);
 
 #endif
