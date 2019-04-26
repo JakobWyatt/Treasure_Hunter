@@ -42,4 +42,28 @@ typedef struct
     char* detail;
 } treasure;
 
+/********************
+Function declarations
+********************/
+
+/*
+PURPOSE: Swap the two treasures.
+USAGE: Imports two pointers to the treasures to be swapped.
+*/
+void swap(treasure* a, treasure* b);
+
+/*
+Implementation of compare_func for head, chest, legs, and hands gear.
+ASSERTIONS:
+gear.type == 'G'
+*/
+
+void compareHead(treasure* gear, explorer* person);
+
+void compareChest(treasure* gear, explorer* person);
+
+void compareLegs(treasure* gear, explorer* person);
+
+void compareHands(treasure* gear, explorer* person);
+
 #endif
