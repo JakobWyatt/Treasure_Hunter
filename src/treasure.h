@@ -47,6 +47,13 @@ Function declarations
 ********************/
 
 /*
+PURPOSE: Parses the string and overwrites make's data.
+USAGE: If the string was invalid, print the error to stderr and
+    return ABORTED. Otherwise, return COMPLETE.
+*/
+status make_treasure(char* str, treasure* make);
+
+/*
 PURPOSE: Swap the two treasures.
 USAGE: Imports two pointers to the treasures to be swapped.
 */
