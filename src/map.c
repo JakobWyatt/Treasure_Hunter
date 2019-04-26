@@ -95,7 +95,7 @@ status fill_map(map read_into, size_t rows, size_t cols, FILE* file)
                 however it complicates matters when the file does not end with a newline.
         */
         line = read_line(file);
-        result = split(tokens, cols, line, ',');
+        result = split(line, ',', tokens, cols);
         if (result == COMPLETE)
         {
             /*The token array has been filled.*/
@@ -124,9 +124,39 @@ status fill_map(map read_into, size_t rows, size_t cols, FILE* file)
 
     return result;
 }
-/*
-char* read_line(file)
-{
 
+char* read_line(FILE* file)
+{
+    /*
+    Attempt to read a line from a file with fgets.
+    If the line was too big for the buffer,
+    create a bigger array and try to read again.
+    */
+    int size = 100;
+    char* str = malloc(sizeof(char) * size);
+    long pos = ftell(file);
+    str[size - 1] = 1;
+    fgets(str, size, file);
+    char* error = str;
+
+    while (str[size - 1] == '\0' && error != NULL)
+    {
+        free(str);
+        size *= 2;
+        /*Does not check for allocation faliure*/
+        str = malloc(sizeof(char) * size);
+        fseek(file, pos, SEEK_SET);
+        str[size - 1] = 1;
+        error = fgets(str, size, file);
+    }
+
+    /*If a file error has occured,
+    or we have reached eof before any characters could be read,
+    create an empty string.*/
+    if (error == NULL)
+    {
+        str[0] = '\0';
+    }
+
+    return str;
 }
-*/
