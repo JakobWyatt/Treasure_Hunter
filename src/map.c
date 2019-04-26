@@ -160,3 +160,28 @@ char* read_line(FILE* file)
 
     return str;
 }
+
+status split(char* line, char delim, char** tokens, size_t tokens_sz)
+{
+    size_t li = 0;
+    size_t ti = 0;
+    status result = COMPLETE;
+    while(line[li] != '\0')
+    {
+        if (line[li] == delim)
+        {
+            /*Replace the delimiter with a line ending,
+            and add it to the token array.*/
+            line[li] = '\0';
+            tokens[ti] = line + li;
+            ++ti;
+        }
+        ++li;
+    }
+
+    if (ti != tokens_sz)
+    {
+        result = ABORTED;
+    }
+    return result;
+}
