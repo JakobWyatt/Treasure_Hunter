@@ -104,31 +104,67 @@ void swap(treasure* a, treasure* b)
 
 compare_func chooseCompareFunc(char* str)
 {
-    toUpperStr(str);
+    toLowerStr(str);
     compare_func func = NULL;
-    if (strcmp(str, "HEAD") == 0)
+    if (strcmp(str, "head") == 0)
     {
-        func = compareHead;
-    } else if (strcmp(str, "LEGS") == 0)
+        func = &compareHead;
+    } else if (strcmp(str, "legs") == 0)
     {
-        func = compareLegs;
-    } else if (strcmp(str, "CHEST") == 0)
+        func = &compareLegs;
+    } else if (strcmp(str, "chest") == 0)
     {
-        func = compareChest;
-    } else if (strcmp(str, "HANDS") == 0)
+        func = &compareChest;
+    } else if (strcmp(str, "hands") == 0)
     {
-        func = compareHands;
+        func = &compareHands;
     }
 
     return func;
 }
 
-void toUpperStr(char* str)
+void slot(treasure x, char* str)
+{
+    if (x.compare == &compareHead)
+    {
+        strncpy(str, "head", 6);
+    } else if (x.compare == &compareLegs)
+    {
+        strncpy(str, "legs", 6);
+    } else if (x.compare == &compareChest)
+    {
+        strncpy(str, "chest", 6);
+    } else if (x.compare == &compareHands)
+    {
+        strncpy(str, "hands", 6);
+    }
+}
+
+void toLowerStr(char* str)
 {
     while (*str != '\0')
     {
-        toupper(str);
+        tolower(str);
         ++str;
+    }
+}
+
+void print(treasure x)
+{
+    char slot_str[6];
+    if (x.type != 'N')
+    {
+        printf(" type: %c", x.type);
+        printf(" value: %d", x.value);
+        if (x.type != 'C')
+        {
+            printf(" detail: %s", x.detail);
+            if (x.type != 'M')
+            {
+                slot(x, slot_str);
+                printf( " slot: %s", slot_str);
+            }
+        }
     }
 }
 
