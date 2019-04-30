@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include "map.h"
+#include "movement.h"
 
 int main(int argc, char* argv[])
 {
@@ -27,16 +28,20 @@ int main(int argc, char* argv[])
     size_t rows;
     size_t cols;
     map x;
+    list y;
     status result;
-    if (argc != 2)
+    if (argc != 3)
     {
-        printf("Usage: ./TreasureHunter <map_file>\n");
+        printf("Usage: ./TreasureHunter <map_file> <movement_file>\n");
     } else
     {
         result = read_map(&x, &rows, &cols, argv[1]);
         if (result == COMPLETE)
         {
             print_map(x, rows, cols);
+            result = read_moves(&y, argv[2]);
+            for_each(y, &print);
+            free_list(y);
             free_map(x, rows, cols);
         }
     }
