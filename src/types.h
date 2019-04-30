@@ -70,4 +70,28 @@ USAGE: 2D dynamically allocated array of treasure structs.
 */
 typedef treasure** map;
 
+/*
+PURPOSE: Stores the direction of a move action.
+IMPLEMENTATION: Enum of all possible directions.
+USAGE: Used inside move struct.
+*/
+typedef enum
+{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+} direction;
+
+/*
+PURPOSE: Stores a move action, which consists of a direction and distance.
+IMPLEMENTATION: Struct of direction enum and distance.
+USAGE: Stored in linked list to show all user actions.
+*/
+typedef struct
+{
+    direction dir;
+    int distance;
+} move;
+
 #endif
