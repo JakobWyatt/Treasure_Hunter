@@ -66,10 +66,22 @@ USAGE: If str is invalid, compare_func is NULL.
 compare_func chooseCompareFunc(char* str);
 
 /*
-PURPOSE: Converts the given string to uppercase.
+PURPOSE: Writes the textual representation of the slot into the string.
+USAGE: The number of bytes in string must be >= 6.
+*/
+void slot(treasure x, char* str);
+
+/*
+PURPOSE: Converts the given string to lowercase.
 USAGE: str must be null-terminated.
 */
-void toUpperStr(char* str);
+void toLowerStr(char* str);
+
+/*
+PURPOSE: Prints a treasures information to stdout.
+USAGE: For debugging.
+*/
+void print(treasure x);
 
 /*
 Implementation of compare_func for head, chest, legs, and hands gear.
