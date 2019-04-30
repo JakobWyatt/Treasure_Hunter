@@ -3,24 +3,86 @@
 #include <ctype.h> /*toupper*/
 #include <string.h> /*strchr*/
 
+/*TODO: Split this into multiple functions*/
 status make_treasure(char* str, treasure* make)
 {
     status result = COMPLETE;
     int args_read;
-    char* seperator;
+    char* seperator1;
+    char* seperator2;
     char type = '\0';
-    char gear_slot[6];
     sscanf(str, "%c", &type);
     toupper(type);
+    make->type = type;
     switch (type)
     {
         case 'C':
             args_read = sscanf(str, "%*c %d", &make->value);
+            if (args_read != 1)
+            {
+                fprintf(stderr, "Incorrect formatting. Coins are represented as: \"C <value>\"\n");
+                result = ABORTED;
+            }
             break;
         case 'M':
-            seperator = strchr(str, ':');
+            seperator1 = strchr(str, ':');
+            /*Ensure there is a :, and if so, there is at least one character in the detail string.*/
+            if (seperator1 == NULL || seperator1 - str < 3)
+            {
+                result = ABORTED;
+            } else
+            {
+                /*Turn the seperator1 into a string termination character, essentially splitting the string.*/
+                /*Allocate enough memory to store the detail string. Do not check if allocation was sucessful.*/
+                *seperator1 = '\0';
+                make->detail = (char*)malloc(sizeof(char) * (seperator1 - str - 1));
+                strncpy(make->detail, str + 2, seperator1 - str - 1);
+                args_read = sscanf(seperator1 + 1, "%d", &make->value);
+                if (args_read != 1)
+                {
+                    result = ABORTED;
+                }
+            }
+
+            if (result = ABORTED)
+            {
+                fprintf(stderr, "Incorrect formatting. Magic items are represented as: \"M <detail>:<value>\"\n");
+            }
             break;
         case 'G':
+            seperator1 = strchr(str, ':');
+            if (seperator1 == NULL || seperator1 - str < 3)
+            {
+                result = ABORTED;
+            } else
+            {
+                seperator2 = strchr(seperator1 + 1, ':');
+                if (seperator2 == NULL)
+                {
+                    result = ABORTED;
+                } else {
+                    /*At this point, we have two pointers to both seperators*/
+                    *seperator1 = '\0';
+                    *seperator2 = '\0';
+                    /*create detail*/
+                    make->detail = (char*)malloc(sizeof(char) * (seperator1 - str - 1));
+                    strncpy(make->detail, str + 2, seperator1 - str - 1);
+                    /*create gear*/
+                    make->compare = chooseCompareFunc(seperator1 + 1);
+                    /*create value*/
+                    args_read = sscanf(seperator2 + 1, "%d", &make->value);
+                    /*check for errors*/
+                    if (make->compare == NULL || args_read != 1)
+                    {
+                        result = ABORTED;
+                    }
+                }
+            }
+
+            if (result = ABORTED)
+            {
+                fprintf(stderr, "Incorrect formatting. Gear is represented as: \"G <detail>:<slot>:<value>\"\n");
+            }
             break;
         default:
             result = ABORTED;
@@ -34,6 +96,36 @@ void swap(treasure* a, treasure* b)
     treasure tmp = *a;
     *a = *b;
     *b = tmp;
+}
+
+compare_func chooseCompareFunc(char* str)
+{
+    toUpperStr(str);
+    compare_func func = NULL;
+    if (strcmp(str, "HEAD") == 0)
+    {
+        func = compareHead;
+    } else if (strcmp(str, "LEGS") == 0)
+    {
+        func = compareLegs;
+    } else if (strcmp(str, "CHEST") == 0)
+    {
+        func = compareChest;
+    } else if (strcmp(str, "HANDS") == 0)
+    {
+        func = compareHands;
+    }
+
+    return func;
+}
+
+void toUpperStr(char* str)
+{
+    while (*str != '\0')
+    {
+        toupper(str);
+        ++str;
+    }
 }
 
 void compareHead(treasure* gear, explorer* person)
