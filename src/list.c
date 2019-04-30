@@ -19,6 +19,10 @@ void insert(list x, node* iter, void* data)
         new->next = iter;
         new->prev->next = new;
         x.tail = new;
+        if (x.head == NULL)
+        {
+            x.head = new;
+        }
     } else if (iter->prev == NULL)
     {
         new->prev = iter->prev;
