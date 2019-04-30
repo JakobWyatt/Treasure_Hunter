@@ -80,7 +80,8 @@ typedef enum
     UP,
     DOWN,
     LEFT,
-    RIGHT
+    RIGHT,
+    INVALID
 } direction;
 
 /*
