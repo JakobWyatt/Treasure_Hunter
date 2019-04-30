@@ -125,6 +125,26 @@ direction choose_dir(char* dir)
     {
         dir = INVALID;
     }
-    
+
     return dir;
+}
+
+void direction_to_string(direction d, char* str)
+{
+    if (d == UP)
+    {
+        strncpy(str, "UP", 6);
+    } else if (d == DOWN)
+    {
+        strncpy(str, "DOWN", 6);
+    } else if (d == LEFT)
+    {
+        strncpy(str, "LEFT", 6);
+    } else if (d == RIGHT)
+    {
+        strncpy(str, "RIGHT", 6);
+    } else if (d == INVALID)
+    {
+        strncpy(str, "INVALID", 6);
+    }
 }

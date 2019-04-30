@@ -30,4 +30,10 @@ USAGE: Converts dir to lowercase. If it is an
 */
 direction choose_dir(char* dir);
 
+/*
+PURPOSE: Writes a direction, in string form, to the given str.
+USAGE: str must be able to hold at least 6 characters.
+*/
+void direction_to_string(direction d, char* str);
+
 #endif
