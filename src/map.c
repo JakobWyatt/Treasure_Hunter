@@ -31,6 +31,10 @@ status read_map(map* read_into, size_t* rows, size_t* cols, char* filename)
                 result = ABORTED;
             } else {
                 result = fill_map(*read_into, *rows, *cols, file);
+                if (result == ABORTED)
+                {
+                    free_map(*read_into, *rows, *cols);
+                }
             }
         }
         /*Cleanup file reads: check error state and close stream.*/
@@ -49,6 +53,7 @@ map allocate_map(size_t rows, size_t cols)
 {
     map result = (map)malloc(sizeof(treasure*) * rows);
     int i = 0;
+    int j;
     if (result != NULL)
     {
         /*If allocation fails at any point,
@@ -73,7 +78,39 @@ map allocate_map(size_t rows, size_t cols)
             result = NULL;
         }
     }
+
+    /*After filling the map, assign every treasure.type == N,
+    so that deallocation occurs successfully.*/
+    if (result != NULL)
+    {
+        for (i = 0; i != rows; ++i)
+        {
+            for (j = 0; j != cols; ++j)
+            {
+                result[i][j].type = 'N';
+            }
+        }
+    }
     return result;
+}
+
+void free_map(map x, size_t rows, size_t cols)
+{
+    size_t i;
+    size_t j;
+    for (i = 0; i != rows; ++i)
+    {
+        for (j = 0; j != cols; ++j)
+        {
+            //Deallocate the detail string
+            if (x[i][j].type != 'N')
+            {
+                free(x[i][j].detail);
+            }
+        }
+        free(x[i]);
+    }
+    free(x);
 }
 
 status fill_map(map read_into, size_t rows, size_t cols, FILE* file)
@@ -199,4 +236,17 @@ status split(char* line, char delim, char** tokens, size_t tokens_sz)
         result = ABORTED;
     }
     return result;
+}
+
+void print_map(map, size_t rows, size_t cols)
+{
+    size_t i;
+    size_t j;
+    for (i = 0; i != rows; ++i)
+    {
+        for (j = 0; j != cols; ++j)
+        {
+            printf("Row: %zu. Col: %zu. Treasure: %s")
+        }
+    }
 }
