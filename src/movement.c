@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "list.h" /*for obvious reasons*/
 #include "treasure.h" /*toLowerStr*/
@@ -17,7 +18,6 @@ status read_moves(list* moves, char* filename)
     char line[MOVE_LINE_BUFFER_SIZE];
     status result = COMPLETE;
     char* line_read;
-    char* space;
     int i = 1;
     FILE* file = fopen(filename, "r");
     *moves = make_list();
@@ -31,7 +31,7 @@ status read_moves(list* moves, char* filename)
     {
         /*We must initially read from the file,
         as line_read cannot be null when passed to parse_movement.*/
-        line_read = fgets(line, MOVE_LINE_BUFFER_SIZE, filename);
+        line_read = fgets(line, MOVE_LINE_BUFFER_SIZE, file);
         while (result == COMPLETE && line_read != NULL)
         {
             result = parse_movement(moves, line_read);
@@ -39,7 +39,7 @@ status read_moves(list* moves, char* filename)
             {
                 fprintf(stderr, "At line %d.\n", i);
             }
-            line_read = fgets(line, MOVE_LINE_BUFFER_SIZE, filename);
+            line_read = fgets(line, MOVE_LINE_BUFFER_SIZE, file);
             ++i;
         }
 
@@ -68,7 +68,7 @@ status parse_movement(list* moves, char* line)
     /*Does not check for broken allocation*/
     status result = COMPLETE;
     char* space = strchr(line, ' ');
-    int args_read;
+    int args_read = 0;
 
     /*We do not guarentee strong exception safety, so allocation and
     addition to the list can be done immidiately. This improves the chance
@@ -105,20 +105,20 @@ status parse_movement(list* moves, char* line)
     return result;
 }
 
-direction choose_dir(char* dir)
+direction choose_dir(char* str)
 {
     direction dir;
-    toLowerStr(dir);
-    if (strcmp(dir, "up") == 0)
+    toLowerStr(str);
+    if (strcmp(str, "up") == 0)
     {
         dir = UP;
-    } else if (strcmp(dir, "down") == 0)
+    } else if (strcmp(str, "down") == 0)
     {
         dir = DOWN;   
-    } else if (strcmp(dir, "left") == 0)
+    } else if (strcmp(str, "left") == 0)
     {
         dir = LEFT;
-    } else if (strcmp(dir, "right") == 0)
+    } else if (strcmp(str, "right") == 0)
     {
         dir = RIGHT;
     } else
@@ -149,9 +149,10 @@ void direction_to_string(direction d, char* str)
     }
 }
 
-void print(move m)
+void print_move(void* m)
 {
     char str[6];
-    direction_to_string(m.dir, str);
-    printf("%s %d", str, m.distance);
+    move* a = (move*)m;
+    direction_to_string(a->dir, str);
+    printf("%s %d", str, a->distance);
 }

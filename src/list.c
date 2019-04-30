@@ -1,6 +1,6 @@
 #include "list.h"
 
-#include <stddef.h> /*NULL*/
+#include <stdlib.h> /*NULL*/
 
 void insert(list x, node* iter, void* data)
 {
@@ -38,7 +38,7 @@ void insert(list x, node* iter, void* data)
     }
 }
 
-void remove(list x, node* iter)
+void remove_node(list x, node* iter)
 {
     free(iter->data);
     /*If the node is head or tail, change list pointers*/
@@ -71,7 +71,7 @@ void free_list(list x)
 {
     while (x.head != NULL)
     {
-        remove(x, x.head);
+        remove_node(x, x.head);
     }
 }
 

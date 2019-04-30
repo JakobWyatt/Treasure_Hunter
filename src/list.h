@@ -41,7 +41,7 @@ void insert(list x, node* iter, void* data);
 PURPOSE: Deallocates and removes the given element.
 USAGE: Pass a pointer to the element to remove.
 */
-void remove(list x, node* iter);
+void remove_node(list x, node* iter);
 
 /*
 PURPOSE: Creates an empty list.
