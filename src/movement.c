@@ -148,3 +148,10 @@ void direction_to_string(direction d, char* str)
         strncpy(str, "INVALID", 6);
     }
 }
+
+void print(move m)
+{
+    char str[6];
+    direction_to_string(m.dir, str);
+    printf("%s %d", str, m.distance);
+}

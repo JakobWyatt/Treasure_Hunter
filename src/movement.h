@@ -36,4 +36,10 @@ USAGE: str must be able to hold at least 6 characters.
 */
 void direction_to_string(direction d, char* str);
 
+/*
+PURPOSE: Prints the move to stdout.
+USAGE: Used for debugging purposes.
+*/
+void print(move m);
+
 #endif
