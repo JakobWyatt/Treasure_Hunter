@@ -238,7 +238,7 @@ status split(char* line, char delim, char** tokens, size_t tokens_sz)
     return result;
 }
 
-void print_map(map, size_t rows, size_t cols)
+void print_map(map x, size_t rows, size_t cols)
 {
     size_t i;
     size_t j;
@@ -246,7 +246,8 @@ void print_map(map, size_t rows, size_t cols)
     {
         for (j = 0; j != cols; ++j)
         {
-            printf("Row: %zu. Col: %zu. Treasure: %s")
+            printf("\nRow: %zu. Col: %zu. Treasure: ", i, j);
+            print(x[i][j]);
         }
     }
 }

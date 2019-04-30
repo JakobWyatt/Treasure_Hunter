@@ -31,7 +31,7 @@ PURPOSE: Reads in a map from a file.
 USAGE: Imports filename. Exports read_into, rows, cols, and status.
     If an error was encountered, it is written to stderr and the returned status is
     ABORTED. Otherwise, the returned status is COMPLETE.
-    Use free_map(map, size_t) to free the data after use.
+    Use free_map(map, size_t, size_t) to free the data after use.
     This should only be done if the status == COMPLETE.
 */
 status read_map(map* read_into, size_t* rows, size_t* cols, char* filename);
@@ -46,7 +46,7 @@ map allocate_map(size_t rows, size_t cols);
 PURPOSE: Deallocates a map.
 USAGE: After map has been used, deallocate it.
 */
-void free_map(map x, size_t rows);
+void free_map(map x, size_t rows, size_t cols);
 
 /*
 PURPOSE: Fills a map with information from a file.
