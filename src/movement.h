@@ -23,4 +23,11 @@ strong exception safety.
 */
 status parse_movement(list* moves, char* line);
 
+/*
+PURPOSE: Picks a direction given the string.
+USAGE: Converts dir to lowercase. If it is an
+    invalid direction, returns INVALID.
+*/
+direction choose_dir(char* dir);
+
 #endif

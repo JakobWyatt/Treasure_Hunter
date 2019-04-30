@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "list.h"
+#include "list.h" /*for obvious reasons*/
+#include "treasure.h" /*toLowerStr*/
 
 #define MOVE_LINE_BUFFER_SIZE 29
 
@@ -102,4 +103,28 @@ status parse_movement(list* moves, char* line)
     }
 
     return result;
+}
+
+direction choose_dir(char* dir)
+{
+    direction dir;
+    toLowerStr(dir);
+    if (strcmp(dir, "up") == 0)
+    {
+        dir = UP;
+    } else if (strcmp(dir, "down") == 0)
+    {
+        dir = DOWN;   
+    } else if (strcmp(dir, "left") == 0)
+    {
+        dir = LEFT;
+    } else if (strcmp(dir, "right") == 0)
+    {
+        dir = RIGHT;
+    } else
+    {
+        dir = INVALID;
+    }
+    
+    return dir;
 }
