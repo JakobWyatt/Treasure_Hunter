@@ -84,6 +84,10 @@ status make_treasure(char* str, treasure* make)
                 fprintf(stderr, "Incorrect formatting. Gear is represented as: \"G <detail>:<slot>:<value>\"\n");
             }
             break;
+        case '\0':
+            /*There is no treasure at this location*/
+            make->type = 'N';
+            break;
         default:
             result = ABORTED;
             fprintf(stderr, "%c is not a valid treasure type.\n", type);
