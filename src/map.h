@@ -32,6 +32,7 @@ USAGE: Imports filename. Exports read_into, rows, cols, and status.
     If an error was encountered, it is written to stderr and the returned status is
     ABORTED. Otherwise, the returned status is COMPLETE.
     Use free_map(map, size_t) to free the data after use.
+    This should only be done if the status == COMPLETE.
 */
 status read_map(map* read_into, size_t* rows, size_t* cols, char* filename);
 
@@ -40,6 +41,12 @@ PURPOSE: Dynamically allocates a map (2d array of treasure).
 USAGE: Returns a dynamically allocated map. If map==NULL, allocation failed.
 */
 map allocate_map(size_t rows, size_t cols);
+
+/*
+PURPOSE: Deallocates a map.
+USAGE: After map has been used, deallocate it.
+*/
+void free_map(map x, size_t rows);
 
 /*
 PURPOSE: Fills a map with information from a file.
@@ -71,5 +78,11 @@ USAGE: tokens is a pointer to an array of char*.
     Strings stored in tokens remain in scope as long as line remains in scope.
 */
 status split(char* line, char delim, char** tokens, size_t tokens_sz);
+
+/*
+PURPOSE: Prints a map to stdout.
+USAGE: For debugging purposes.
+*/
+void print_map(map, size_t rows, size_t cols);
 
 #endif
