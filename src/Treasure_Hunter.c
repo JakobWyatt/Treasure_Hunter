@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stddef.h>
+#include "map.h"
+#include "explore.h"
 
 int main(int argc, char* argv[])
 {
@@ -21,4 +24,21 @@ int main(int argc, char* argv[])
         If the path is changed, control flow continues and the status is CORRECTED.
     -Print the output of the program.
     */
+
+    size_t rows;
+    size_t cols;
+    map x;
+    status result;
+    if (argc != 2)
+    {
+        printf("Usage: ./TreasureHunter <map_file>");
+    } else
+    {
+        result = read_map(&x, &rows, &cols, argv[1]);
+        if (result == COMPLETE)
+        {
+            print_map(x, rows, cols);
+            free_map(x, rows, cols);
+        }
+    }
 }
