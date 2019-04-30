@@ -19,7 +19,7 @@ status read_map(map* read_into, size_t* rows, size_t* cols, char* filename)
     } else
     {
         /*Note: fscanf does not protect against integer overflow.*/
-        args_read = fscanf(file, "%zu,%zu", rows, cols);
+        args_read = fscanf(file, "%zu,%zu\n", rows, cols);
         if (args_read != 2)
         {
             fprintf(stderr, "Incorrect formatting in %s, line 1: Expected <rows>,<cols>\n", filename);
@@ -156,10 +156,10 @@ status fill_map(map read_into, size_t rows, size_t cols, FILE* file)
             Otherwise, there is an incorrect number of columns.*/
             if (feof(file))
             {
-                fprintf(stderr, "Incorrect number of rows: read %zu, expected %zu.\n", i, rows);
+                fprintf(stderr, "Incorrect number of rows: read %zu, expected %zu.\n", i + 1, rows);
             } else
             {
-                fprintf(stderr, "Incorrect number of columns at row %zu: expected %zu.\n", i + 1, cols);
+                fprintf(stderr, "Incorrect number of columns at line %zu: expected %zu.\n", i + 2, cols);
             }
         }
         ++i;
@@ -218,8 +218,12 @@ char* read_line(FILE* file)
 status split(char* line, char delim, char** tokens, size_t tokens_sz)
 {
     size_t li = 0;
-    size_t ti = 0;
+    size_t ti = 1;
     status result = COMPLETE;
+    
+    /*The first token starts at the beginning of the string*/
+    tokens[0] = line;
+    
     while(line[li] != '\0')
     {
         if (line[li] == delim)
@@ -227,7 +231,7 @@ status split(char* line, char delim, char** tokens, size_t tokens_sz)
             /*Replace the delimiter with a line ending,
             and add it to the token array.*/
             line[li] = '\0';
-            tokens[ti] = line + li;
+            tokens[ti] = line + li + 1;
             ++ti;
         }
         ++li;

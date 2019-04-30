@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
     status result;
     if (argc != 2)
     {
-        printf("Usage: ./TreasureHunter <map_file>");
+        printf("Usage: ./TreasureHunter <map_file>\n");
     } else
     {
         result = read_map(&x, &rows, &cols, argv[1]);
