@@ -55,6 +55,12 @@ void remove(list x, node* iter)
     free(iter);
 }
 
-list make_list();
+list make_list()
+{
+    list x;
+    x.head = NULL;
+    x.tail = NULL;
+    return x;
+}
 
 void free_list(list x);
