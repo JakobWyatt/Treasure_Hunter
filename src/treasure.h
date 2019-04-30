@@ -60,6 +60,18 @@ USAGE: Imports two pointers to the treasures to be swapped.
 void swap(treasure* a, treasure* b);
 
 /*
+PURPOSE: Chooses the corresponding compare_func for a given string.
+USAGE: If str is invalid, compare_func is NULL.
+*/
+compare_func chooseCompareFunc(char* str);
+
+/*
+PURPOSE: Converts the given string to uppercase.
+USAGE: str must be null-terminated.
+*/
+void toUpperStr(char* str);
+
+/*
 Implementation of compare_func for head, chest, legs, and hands gear.
 ASSERTIONS:
 gear.type == 'G'
