@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stddef.h>
 #include "map.h"
-#include "explore.h"
 
 int main(int argc, char* argv[])
 {

@@ -4,6 +4,8 @@
 #include <stdlib.h> /*malloc*/
 #include <string.h> /*strchr*/
 
+#include "treasure.h"
+
 status read_map(map* read_into, size_t* rows, size_t* cols, char* filename)
 {
     status result = COMPLETE;
@@ -40,7 +42,7 @@ status read_map(map* read_into, size_t* rows, size_t* cols, char* filename)
         /*Cleanup file reads: check error state and close stream.*/
         if (ferror(file))
         {
-            fprintf("Error occured while reading from %s: ", filename);
+            fprintf(stderr, "Error occured while reading from %s: ", filename);
             perror("");
             result = ABORTED;
         }
@@ -102,7 +104,7 @@ void free_map(map x, size_t rows, size_t cols)
     {
         for (j = 0; j != cols; ++j)
         {
-            //Deallocate the detail string
+            /*Deallocate the detail string*/
             if (x[i][j].type != 'N')
             {
                 free(x[i][j].detail);
@@ -179,10 +181,10 @@ char* read_line(FILE* file)
     int size = 100;
     char* str = malloc(sizeof(char) * size);
     long pos = ftell(file);
-    str[size - 1] = 1;
-    fgets(str, size, file);
     char* error = str;
     char* end;
+    str[size - 1] = 1;
+    fgets(str, size, file);
 
     while (str[size - 1] == '\0' && error != NULL)
     {

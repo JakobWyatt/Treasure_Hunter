@@ -1,4 +1,5 @@
 #include "treasure.h"
+#include <stdlib.h> /*malloc*/
 #include <stdio.h> /*sscanf*/
 #include <ctype.h> /*toupper*/
 #include <string.h> /*strchr*/
@@ -12,7 +13,7 @@ status make_treasure(char* str, treasure* make)
     char* seperator2;
     char type = '\0';
     sscanf(str, "%c", &type);
-    toupper(type);
+    type = toupper(type);
     make->type = type;
     switch (type)
     {
@@ -44,7 +45,7 @@ status make_treasure(char* str, treasure* make)
                 }
             }
 
-            if (result = ABORTED)
+            if (result == ABORTED)
             {
                 fprintf(stderr, "Incorrect formatting. Magic items are represented as: \"M <detail>:<value>\"\n");
             }
@@ -79,7 +80,7 @@ status make_treasure(char* str, treasure* make)
                 }
             }
 
-            if (result = ABORTED)
+            if (result == ABORTED)
             {
                 fprintf(stderr, "Incorrect formatting. Gear is represented as: \"G <detail>:<slot>:<value>\"\n");
             }
@@ -104,8 +105,8 @@ void swap(treasure* a, treasure* b)
 
 compare_func chooseCompareFunc(char* str)
 {
-    toLowerStr(str);
     compare_func func = NULL;
+    toLowerStr(str);
     if (strcmp(str, "head") == 0)
     {
         func = &compareHead;
@@ -144,7 +145,7 @@ void toLowerStr(char* str)
 {
     while (*str != '\0')
     {
-        tolower(str);
+        *str = tolower(*str);
         ++str;
     }
 }

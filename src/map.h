@@ -4,23 +4,7 @@
 #include <stddef.h> /*size_t*/
 #include <stdio.h> /*FILE*/
 
-#include "explore.h" /*status*/
-#include "treasure.h" /*treasure*/
-
-/********************
-Type declarations
-********************/
-
-/********************
-Type definitions
-********************/
-
-/*
-PURPOSE: Stores information about the map.
-IMPLEMENTATION: Typedef of pointer to pointer to treasure.
-USAGE: 2D dynamically allocated array of treasure structs.
-*/
-typedef treasure** map;
+#include "types.h" /*status*/
 
 /********************
 Function declarations

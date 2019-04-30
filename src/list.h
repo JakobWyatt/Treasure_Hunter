@@ -1,6 +1,8 @@
 #ifndef GUARD_LIST_H
 #define GUARD_LIST_H
 
+typedef struct node_s node;
+
 /*
 PURPOSE: Type describing a node in a linked list.
 IMPLEMENTATION: Contains a void pointer to the data stored in the node,
@@ -9,11 +11,11 @@ IMPLEMENTATION: Contains a void pointer to the data stored in the node,
 USAGE: The data stored in the node must be manually dynamically allocated,
     and the type of the data stored in the node is maintained by the user.
 */
-typedef struct
+struct node_s
 {
     void* data;
     node* next;
-} node;
+};
 
 /*
 PURPOSE: Type describing a linked list.
