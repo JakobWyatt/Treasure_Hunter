@@ -63,4 +63,10 @@ list make_list()
     return x;
 }
 
-void free_list(list x);
+void free_list(list x)
+{
+    while (x.head != NULL)
+    {
+        remove(x, x.head);
+    }
+}
