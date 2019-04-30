@@ -56,4 +56,12 @@ USAGE: Each element on the linked list must be dynamically allocated,
 */
 void free_list(list x);
 
+/*
+PURPOSE: Apply the given function to all elements.
+USAGE: func must not be null.
+*/
+typedef void (*for_each_func)(void*);
+
+void for_each(list x, for_each_func func);
+
 #endif

@@ -74,3 +74,13 @@ void free_list(list x)
         remove(x, x.head);
     }
 }
+
+void for_each(list x, for_each_func func)
+{
+    node* a = x.head;
+    while (a != NULL)
+    {
+        func(a->data);
+        a = a->next;
+    }
+}
