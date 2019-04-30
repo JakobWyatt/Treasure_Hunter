@@ -1,3 +1,6 @@
 .DS_Store
 .vscode/
 *.o
+src/TreasureHunter
+src/TreasureHunterAI
+src/TreasureHunterLog
