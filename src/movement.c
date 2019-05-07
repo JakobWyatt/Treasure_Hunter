@@ -4,7 +4,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "list.h" /*for obvious reasons*/
 #include "treasure.h" /*toLowerStr*/
 
 #define MOVE_LINE_BUFFER_SIZE 29
