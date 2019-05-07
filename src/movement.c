@@ -48,6 +48,7 @@ status read_moves(list* moves, char* filename)
         {
             fprintf(stderr, "File %s was empty.\n", filename);
             result = ABORTED;
+            free_list(*moves);
         }
 
         /*Cleanup file reads: check error state and close stream.*/
@@ -56,6 +57,7 @@ status read_moves(list* moves, char* filename)
             fprintf(stderr, "Error occured while reading from %s: ", filename);
             perror("");
             result = ABORTED;
+            free_list(*moves);
         }
         fclose(file);
     }

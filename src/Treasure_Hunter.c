@@ -45,4 +45,5 @@ int main(int argc, char* argv[])
             free_map(x, rows, cols);
         }
     }
+    return 0;
 }

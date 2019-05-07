@@ -17,11 +17,13 @@ void insert(list x, node* iter, void* data)
     {
         new->prev = x.tail;
         new->next = iter;
-        new->prev->next = new;
         x.tail = new;
         if (x.head == NULL)
         {
             x.head = new;
+        } else
+        {
+            new->prev->next = new;
         }
     } else if (iter->prev == NULL)
     {

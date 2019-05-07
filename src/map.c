@@ -19,7 +19,7 @@ status read_map(map* read_into, size_t* rows, size_t* cols, char* filename)
     } else
     {
         /*Note: fscanf does not protect against integer overflow.*/
-        args_read = fscanf(file, "%zu,%zu\n", rows, cols);
+        args_read = fscanf(file, "%lu,%lu\n", rows, cols);
         if (args_read != 2)
         {
             fprintf(stderr, "Incorrect formatting in %s, line 1: Expected <rows>,<cols>\n", filename);
@@ -146,7 +146,7 @@ status fill_map(map read_into, size_t rows, size_t cols, FILE* file)
                 However, it will not print where this error occured.*/
                 if (result != COMPLETE)
                 {
-                    fprintf(stderr, "At row %zu, column %zu.\n", i + 1, j + 1);
+                    fprintf(stderr, "At row %lu, column %lu.\n", (unsigned long)i + 1, (unsigned long)j + 1);
                 }
                 ++j;
             }
@@ -156,10 +156,10 @@ status fill_map(map read_into, size_t rows, size_t cols, FILE* file)
             Otherwise, there is an incorrect number of columns.*/
             if (feof(file))
             {
-                fprintf(stderr, "Incorrect number of rows: read %zu, expected %zu.\n", i + 1, rows);
+                fprintf(stderr, "Incorrect number of rows: read %lu, expected %lu.\n", (unsigned long)i + 1, (unsigned long)rows);
             } else
             {
-                fprintf(stderr, "Incorrect number of columns at line %zu: expected %zu.\n", i + 2, cols);
+                fprintf(stderr, "Incorrect number of columns at line %lu: expected %lu.\n", (unsigned long)i + 2, (unsigned long)cols);
             }
         }
         ++i;
@@ -252,7 +252,7 @@ void print_map(map x, size_t rows, size_t cols)
     {
         for (j = 0; j != cols; ++j)
         {
-            printf("\nRow: %zu. Col: %zu. Treasure: ", i, j);
+            printf("\nRow: %lu. Col: %lu. Treasure: ", (unsigned long)i, (unsigned long)j);
             print(x[i][j]);
         }
     }
