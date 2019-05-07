@@ -105,7 +105,7 @@ void free_map(map x, size_t rows, size_t cols)
         for (j = 0; j != cols; ++j)
         {
             /*Deallocate the detail string*/
-            if (x[i][j].type != 'N')
+            if (x[i][j].type != 'N' && x[i][j].type != 'C')
             {
                 free(x[i][j].detail);
             }
