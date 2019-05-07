@@ -35,13 +35,13 @@ PURPOSE: Insert an element before the given element.
 USAGE: data must be dynamically allocated.
 If iter == NULL, insert the element at the end of the list.
 */
-void insert(list x, node* iter, void* data);
+void insert(list* x, node* iter, void* data);
 
 /*
 PURPOSE: Deallocates and removes the given element.
 USAGE: Pass a pointer to the element to remove.
 */
-void remove_node(list x, node* iter);
+void remove_node(list* x, node* iter);
 
 /*
 PURPOSE: Creates an empty list.
@@ -54,7 +54,7 @@ PURPOSE: Free all elements.
 USAGE: Each element on the linked list must be dynamically allocated,
     with no unique pointers to dynamically allocated members.
 */
-void free_list(list x);
+void free_list(list* x);
 
 /*
 PURPOSE: Apply the given function to all elements.

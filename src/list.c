@@ -2,7 +2,7 @@
 
 #include <stdlib.h> /*NULL*/
 
-void insert(list x, node* iter, void* data)
+void insert(list* x, node* iter, void* data)
 {
     /*create new node*/
     node* new = (node*)malloc(sizeof(node));
@@ -15,12 +15,12 @@ void insert(list x, node* iter, void* data)
     to be identical.*/
     if (iter == NULL)
     {
-        new->prev = x.tail;
+        new->prev = x->tail;
         new->next = iter;
-        x.tail = new;
-        if (x.head == NULL)
+        x->tail = new;
+        if (x->head == NULL)
         {
-            x.head = new;
+            x->head = new;
         } else
         {
             new->prev->next = new;
@@ -30,7 +30,7 @@ void insert(list x, node* iter, void* data)
         new->prev = iter->prev;
         new->next = iter;
         new->next->prev = new;
-        x.head = new;
+        x->head = new;
     } else
     {
         new->prev = iter->prev;
@@ -40,20 +40,20 @@ void insert(list x, node* iter, void* data)
     }
 }
 
-void remove_node(list x, node* iter)
+void remove_node(list* x, node* iter)
 {
     free(iter->data);
     /*If the node is head or tail, change list pointers*/
     /*Otherwise, reroute neighbouring nodes*/
     if (iter->prev == NULL)
     {
-        x.head = iter->next;
+        x->head = iter->next;
     } else {
         iter->prev->next = iter->next;
     }
     if (iter->next == NULL)
     {
-        x.tail = iter->prev;
+        x->tail = iter->prev;
     } else {
         iter->next->prev = iter->prev;
     }
@@ -69,11 +69,11 @@ list make_list()
     return x;
 }
 
-void free_list(list x)
+void free_list(list* x)
 {
-    while (x.head != NULL)
+    while (x->head != NULL)
     {
-        remove_node(x, x.head);
+        remove_node(x, x->head);
     }
 }
 

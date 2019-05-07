@@ -40,10 +40,14 @@ int main(int argc, char* argv[])
         {
             print_map(x, rows, cols);
             result = read_moves(&y, argv[2]);
-            for_each(y, &print_move);
-            free_list(y);
+            if (result == COMPLETE)
+            {
+                for_each(y, &print_move);
+            }
             free_map(x, rows, cols);
+            free_list(&y);
         }
     }
+    printf("\n");
     return 0;
 }

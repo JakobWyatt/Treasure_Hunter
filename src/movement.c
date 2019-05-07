@@ -48,7 +48,6 @@ status read_moves(list* moves, char* filename)
         {
             fprintf(stderr, "File %s was empty.\n", filename);
             result = ABORTED;
-            free_list(*moves);
         }
 
         /*Cleanup file reads: check error state and close stream.*/
@@ -57,13 +56,18 @@ status read_moves(list* moves, char* filename)
             fprintf(stderr, "Error occured while reading from %s: ", filename);
             perror("");
             result = ABORTED;
-            free_list(*moves);
         }
         fclose(file);
     }
 
     return result;
 }
+
+/*First question is pointer diagram*/
+/*Second question: write program*/
+/*Marks are awarded for linked lists*/
+/*Dont have to write linked_list.c
+Just need the concept of linked lists - write all the code yourself*/
 
 status parse_movement(list* moves, char* line)
 {
@@ -76,7 +80,7 @@ status parse_movement(list* moves, char* line)
     addition to the list can be done immidiately. This improves the chance
     we get memory safety right.*/
     move* data = (move*)malloc(sizeof(move));
-    insert(*moves, NULL, data);
+    insert(moves, NULL, data);
 
     if (space == NULL)
     {
@@ -156,5 +160,5 @@ void print_move(void* m)
     char str[6];
     move* a = (move*)m;
     direction_to_string(a->dir, str);
-    printf("%s %d", str, a->distance);
+    printf("\n%s %d", str, a->distance);
 }
