@@ -14,7 +14,8 @@ typedef void (*compare_func)(treasure* gear, explorer* person);
 
 /*
 PURPOSE: Describes the current program status.
-IMPLEMENTATION: Enum of all possible statuses.
+IMPLEMENTATION: Enum of all possible statuses. This means that a
+    status of higher severity will be a higher number.
 USAGE: Returned from functions to show the program status after execution.
 */
 typedef enum
