@@ -13,7 +13,8 @@ USAGE: Returns the status: CORRECTED if any out of bounds movements
     if LOG is defined.
     Out of bounds movements are corrected by defining AI.
     This function does not deallocate map or list.
+    This function does modify the map, and removes any items it encounters.
 */
-status resolveAdventure(map items, list movements, explorer* person);
+status resolveAdventure(map items, unsigned long rows, unsigned long cols, list movements, explorer* person, FILE* file);
 
 #endif
