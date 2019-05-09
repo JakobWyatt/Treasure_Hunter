@@ -52,7 +52,9 @@ struct treasure_s
 PURPOSE: Stores the current items owned by the explorer.
 IMPLEMENTATION: Struct containing total magic and coin value, as well as
     pointers to gear objects.
-USAGE: explorer owns its treasure objects.
+USAGE: explorer owns its treasure objects. If a treasure object has type 'N'
+    and value < 0,
+    then the explorer does not have any gear on that body part.
 */
 struct explorer_s
 {
@@ -63,6 +65,12 @@ struct explorer_s
     treasure legs;
     treasure hands;
 };
+
+/*
+PURPOSE: Creates an explorer with no gear.
+USAGE: Returns an empty explorer.
+*/
+explorer make_explorer();
 
 /*
 PURPOSE: Stores information about the map.
