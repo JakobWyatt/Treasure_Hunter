@@ -169,34 +169,46 @@ void print(treasure x)
     }
 }
 
-void compareHead(treasure* gear, explorer* person)
+int compareHead(treasure* gear, explorer* person)
 {
+    int result = 1;
     if (gear->value > person->head.value)
     {
         swap(gear, &person->head);
+        result = 0;
     }
+    return result;
 }
 
-void compareChest(treasure* gear, explorer* person)
+int compareChest(treasure* gear, explorer* person)
 {
+    int result = 1;
     if (gear->value > person->chest.value)
     {
         swap(gear, &person->chest);
+        result = 0;
     }
+    return result;
 }
 
-void compareLegs(treasure* gear, explorer* person)
+int compareLegs(treasure* gear, explorer* person)
 {
+    int result = 1;
     if (gear->value > person->legs.value)
     {
         swap(gear, &person->legs);
+        result = 0;
     }
+    return result;
 }
 
-void compareHands(treasure* gear, explorer* person)
+int compareHands(treasure* gear, explorer* person)
 {
+    int result = 1;
     if (gear->value > person->hands.value)
     {
         swap(gear, &person->hands);
+        result = 0;
     }
+    return result;
 }

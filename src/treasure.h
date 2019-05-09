@@ -47,15 +47,15 @@ void print(treasure x);
 /*
 Implementation of compare_func for head, chest, legs, and hands gear.
 ASSERTIONS:
-gear.type == 'G'
+gear.value is defined.
 */
 
-void compareHead(treasure* gear, explorer* person);
+int compareHead(treasure* gear, explorer* person);
 
-void compareChest(treasure* gear, explorer* person);
+int compareChest(treasure* gear, explorer* person);
 
-void compareLegs(treasure* gear, explorer* person);
+int compareLegs(treasure* gear, explorer* person);
 
-void compareHands(treasure* gear, explorer* person);
+int compareHands(treasure* gear, explorer* person);
 
 #endif
