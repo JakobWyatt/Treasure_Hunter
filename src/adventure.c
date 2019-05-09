@@ -1,6 +1,6 @@
 #include "adventure.h"
 
-#include <stdio.h> /*NULL*/
+#include <stdlib.h>/*free*/
 
 #include "treasure.h"
 
@@ -15,12 +15,12 @@ status resolveAdventure(map items, unsigned long rows, unsigned long cols, list 
     unsigned long end_j = 0;
     unsigned long i = 0;
     unsigned long j = 0;
-
-    fprintf(file, "---\n");
-
     /*The control flow of our algorithm is
     get_end -> Check for error -> (Traverse map, log as we go)*/
     node* current = movements.head;
+
+    fprintf(file, "---\n");
+
     /*First, find the final block. This is the block we will stop moving on,
     and represents the end of a single command.
     Returns corrected, failed, or success.*/
@@ -58,36 +58,35 @@ void collectAndLog(FILE* file, map items, explorer* person, unsigned long i, uns
 {
     int swapped;
     treasure temp;
-    char slot[6];
     switch (items[i][j].type)
     {
         case 'C':
             person->coin += items[i][j].value;
-            log(file, items[i][j], 0, i, j);
+            logTreasure(file, items[i][j], 0, i, j);
             items[i][j].type = 'N';
             break;
         case 'M':
             person->magic += items[i][j].value;
-            log(file, items[i][j], 0, i, j);
+            logTreasure(file, items[i][j], 0, i, j);
             free(items[i][j].detail);
             items[i][j].type = 'N';
             break;
         case 'G':
             temp = items[i][j];
-            swapped = items[i][j].compare(items[i][j], person);
+            swapped = items[i][j].compare(&items[i][j], person);
             if (swapped == 0)
             {
-                log(file, temp, 0, i, j);
-                log(file, items[i][j], 1, i, j);
+                logTreasure(file, temp, 0, i, j);
+                logTreasure(file, items[i][j], 1, i, j);
             }
             break;
     }
 }
 
 /*If collect == 0, then collect. Else, discard.*/
-void log(FILE* file, treasure x, int collect, unsigned long i, unsigned long j)
+void logTreasure(FILE* file, treasure x, int collect, unsigned long i, unsigned long j)
 {
-    char slot[6];
+    char slotStr[6];
     switch (x.type)
     {
         case 'C':
@@ -99,7 +98,7 @@ void log(FILE* file, treasure x, int collect, unsigned long i, unsigned long j)
                 i, j, x.detail, x.value);
             break;
         case 'G':
-            slot(x, slot);
+            slot(x, slotStr);
             if (collect == 0)
             {
                 fprintf(file, "COLLECT");
@@ -108,7 +107,7 @@ void log(FILE* file, treasure x, int collect, unsigned long i, unsigned long j)
                 fprintf(file, "DISCARD");
             }
             fprintf(file, "<ITEM:GEAR, XLOC:%lu, YLOC:%lu, DESCRIPTION:%s, SLOT:%s, VALUE:%d>\n",
-                    i, j, x.detail, slot, x.value);
+                    i, j, x.detail, slotStr, x.value);
             break;
     }
 
@@ -124,7 +123,7 @@ void log(FILE* file, treasure x, int collect, unsigned long i, unsigned long j)
                 i, j, x.detail, x.value);
             break;
         case 'G':
-            slot(x, slot);
+            slot(x, slotStr);
             if (collect == 0)
             {
                 printf("COLLECT");
@@ -133,7 +132,7 @@ void log(FILE* file, treasure x, int collect, unsigned long i, unsigned long j)
                 printf("DISCARD");
             }
             printf("<ITEM:GEAR, XLOC:%lu, YLOC:%lu, DESCRIPTION:%s, SLOT:%s, VALUE:%d>\n",
-                    i, j, x.detail, slot, x.value);
+                    i, j, x.detail, slotStr, x.value);
             break;
     }
     #endif
@@ -177,15 +176,15 @@ void move_dist(direction dir, unsigned long distance, unsigned long* i, unsigned
 {
     if (dir == LEFT)
     {
-        *i -= distance;
+        *j -= distance;
     } else if (dir == RIGHT)
     {
-        *i += distance;
+        *j += distance;
     } else if (dir == UP)
     {
-        *j -= distance;
+        *i -= distance;
     } else if (dir == DOWN)
     {
-        *j += distance;
+        *i += distance;
     }
 }

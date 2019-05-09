@@ -1,6 +1,8 @@
 #ifndef GUARD_ADVENTURE_H
 #define GUARD_ADVENTURE_H
 
+#include <stdio.h> /*FILE**/
+
 #include "types.h"
 #include "list.h"
 
@@ -28,7 +30,7 @@ void collectAndLog(FILE* file, map items, explorer* person, unsigned long i, uns
 PURPOSE: Logs the treasure to a file, and optionally stdout.
 USAGE: If collect == 0, then collect. Else, discard.
 */
-void log(FILE* file, treasure x, int collect, unsigned long i, unsigned long j);
+void logTreasure(FILE* file, treasure x, int collect, unsigned long i, unsigned long j);
 
 /*
 PURPOSE: Finds the end block of a given direction.
