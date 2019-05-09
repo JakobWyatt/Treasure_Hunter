@@ -8,9 +8,10 @@ typedef struct treasure_s treasure;
 PURPOSE: Represent the type of the treasure compare function.
 IMPLEMENTATION: Typedef of function pointer.
 USAGE: Compares the gear with the persons corresponding gear,
-    and swap them if the persons gear is worse.
+    and swap them if the persons gear is worse. Returns 0
+    if a swap occured.
 */
-typedef void (*compare_func)(treasure* gear, explorer* person);
+typedef int (*compare_func)(treasure* gear, explorer* person);
 
 /*
 PURPOSE: Describes the current program status.
