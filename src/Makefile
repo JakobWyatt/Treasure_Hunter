@@ -5,7 +5,7 @@ DEFAULT_OBJ = list.o map.o movement.o Treasure_Hunter.o treasure.o types.o
 NONE_OBJ = adventure.o
 AI_OBJ = adventureAI.o
 LOG_OBJ = adventureLog.o
-ADV_DEPENDENCIES = types.h list.h adventure.h adventure.c
+ADV_DEPENDENCIES = types.h list.h adventure.h adventure.c treasure.h
 OBJ = $(DEFAULT_OBJ) $(LOG_OBJ) $(AI_OBJ) $(NONE_OBJ)
 
 all: TreasureHunter TreasureHunterAI TreasureHunterLog
