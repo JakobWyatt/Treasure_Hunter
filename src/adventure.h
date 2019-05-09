@@ -17,4 +17,30 @@ USAGE: Returns the status: CORRECTED if any out of bounds movements
 */
 status resolveAdventure(map items, unsigned long rows, unsigned long cols, list movements, explorer* person, FILE* file);
 
+/*
+PURPOSE: Collects the treasure at the given location, and logs it.
+USAGE: file must not be null. pseron must not be null. i and j must reference
+    a legitimate treasure in the map.
+*/
+void collectAndLog(FILE* file, map items, explorer* person, unsigned long i, unsigned long j);
+
+/*
+PURPOSE: Logs the treasure to a file, and optionally stdout.
+USAGE: If collect == 0, then collect. Else, discard.
+*/
+void log(FILE* file, treasure x, int collect, unsigned long i, unsigned long j);
+
+/*
+PURPOSE: Finds the end block of a given direction.
+USAGE: Returns FAILED if out of bounds and CORRECTED if corrected.
+*/
+status endBlock(unsigned long rows, unsigned long cols,
+    unsigned long* i, unsigned long* j, move x);
+
+/*
+PURPOSE: Moves a location a given distance in a given direction.
+USAGE: dir must not be INVALID.
+*/
+void move_dist(direction dir, unsigned long distance, unsigned long* i, unsigned long* j);
+
 #endif
