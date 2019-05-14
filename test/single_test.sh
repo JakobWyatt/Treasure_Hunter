@@ -1,15 +1,15 @@
 #!/bin/bash
 
 valgrind --leak-check=full -v --log-file=../test/valgrind.log --error-exitcode=1 ./TreasureHunter $1 $2 &>> ../test/output.log
-if $?; then
+if [ $? == 1 ]; then
     echo "Memory error."
 fi
 valgrind --leak-check=full -v --log-file=../test/valgrind.log --error-exitcode=1 ./TreasureHunterLog $1 $2 &>> ../test/output.log
-if $?; then
+if [ $? == 1 ]; then
     echo "Memory error."
 fi
 valgrind --leak-check=full -v --log-file=../test/valgrind.log --error-exitcode=1 ./TreasureHunterAI $1 $2 &>> ../test/output.log
-if $?; then
+if [ $? == 1 ]; then
     echo "Memory error."
 fi
 
