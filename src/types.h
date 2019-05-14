@@ -74,6 +74,24 @@ USAGE: Returns an empty explorer.
 explorer make_explorer();
 
 /*
+PURPOSE: Frees the memory owned by the explorer.
+USAGE: ex must have been created with make_explorer.
+*/
+void free_explorer(explorer ex);
+
+/*
+PURPOSE: Finds the total gear value of the explorer.
+USAGE: Explorer must be initialized using make_explorer.
+*/
+int gear_value(explorer ex);
+
+/*
+PURPOSE: Prints the given status as text, into text_rep.
+USAGE: text_rep length >= 10
+*/
+void status_text(status s, char* text_rep);
+
+/*
 PURPOSE: Stores information about the map.
 IMPLEMENTATION: Typedef of pointer to pointer to treasure.
 USAGE: 2D dynamically allocated array of treasure structs.
