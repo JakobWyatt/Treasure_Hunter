@@ -3,6 +3,7 @@
 #include "map.h"
 #include "movement.h"
 #include "adventure.h"
+#include "types.h"
 
 int main(int argc, char* argv[])
 {
@@ -12,8 +13,10 @@ int main(int argc, char* argv[])
     list y;
     status map_result;
     status list_result;
-    explorer person;
+    status adventure_result;
     FILE* logger;
+    explorer person;
+    char final_status[10];
     if (argc != 3)
     {
         printf("Usage: ./TreasureHunter <map_file> <movement_file>\n");
@@ -22,10 +25,14 @@ int main(int argc, char* argv[])
         map_result = read_map(&x, &rows, &cols, argv[1]);
         list_result = read_moves(&y, argv[2]);
         logger = fopen("adventure.log", "a");
+        person = make_explorer();
 
         if (logger != NULL && map_result == COMPLETE && list_result == COMPLETE)
         {
-            resolveAdventure(x, rows, cols, y, &person, logger);
+            adventure_result = resolveAdventure(x, rows, cols, y, &person, logger);
+            status_text(adventure_result, final_status);
+            printf("STATUS: %s\nCOINS: %d\nMAGIC: %d\nGEAR: %d\n", final_status,
+                person.coin, person.magic, gear_value(person));
         }
 
         /*clean up*/
@@ -41,8 +48,8 @@ int main(int argc, char* argv[])
         {
             fclose(logger);
         }
+        free_explorer(person);
         free_list(&y);
     }
-    printf("\n");
     return 0;
 }
