@@ -38,7 +38,7 @@ map.o: map.c map.h types.h treasure.h
 movement.o: movement.c movement.h types.h list.h treasure.h
 	$(CC) $(CFLAGS) movement.c
 
-Treasure_Hunter.o: Treasure_Hunter.c map.h movement.h adventure.h
+Treasure_Hunter.o: Treasure_Hunter.c map.h movement.h adventure.h types.h
 	$(CC) $(CFLAGS) Treasure_Hunter.c
 
 treasure.o: treasure.c treasure.h types.h
