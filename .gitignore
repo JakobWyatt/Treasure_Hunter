@@ -7,4 +7,7 @@ src/TreasureHunterLog
 *.gch
 -Wno-atomic-implicit-seq-cst
 adventure.log
-
+test/output.log
+report.aux
+report.log
+report.toc
