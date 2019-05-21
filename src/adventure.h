@@ -8,28 +8,26 @@
 
 /**
     \file adventure.h
-    \brief Contains functions used to resolve an adventure.
+    \brief Contains functions used to explore a map and collect items.
  */
 
 /**
  * \brief Resolve an adventure, given a map and a list of movements.
- * \param[in] items Map containing all items.
+ * \param[in,out] items Map containing all items.
  * \param[in] rows Number of rows in the map.
  * \param[in] cols Number of columns in the map.
  * \param[in] movements Movements to be made by the explorer.
  * \param[in,out] person Explorer to collect items.
- * \param[in] file File to write logs.
-USAGE: Returns the status: CORRECTED if any out of bounds movements
-    were corrected, FAILED if out of bounds movements weren't corrected,
-    and SUCCESS if the adventure completed sucessfully.
-    All movements are logged to adventure.log. They are also logged to stdout
-    if LOG is defined.
-    Out of bounds movements are corrected by defining AI.
-    This function does not deallocate map or list.
-    This function does modify the map, and removes any items it encounters.
-
-
-*/
+ * \param[in] file File to write logs to.
+ * \return SUCCESS if the adventure was sucessful,
+ *          CORRECTED if out of bounds movements were corrected,
+ *          FAILED if out of bounds movements weren't corrected.
+ * \pre \p file must be opened in "a" mode.
+ * \post \p items is modified when \ref treasure is picked up by \p person.
+ * \post \p items and \p movements are not deallocated by this function.
+ * \details Define AI to correct out of bounds movements.
+ *          Define LOG to log movements to stdout as well as \p file.
+ */
 status resolveAdventure(map items, unsigned long rows, unsigned long cols, list movements, explorer* person, FILE* file);
 
 /*
