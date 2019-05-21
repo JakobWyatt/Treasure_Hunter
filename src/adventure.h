@@ -30,29 +30,53 @@
  */
 status resolveAdventure(map items, unsigned long rows, unsigned long cols, list movements, explorer* person, FILE* file);
 
-/*
-PURPOSE: Collects the treasure at the given location, and logs it.
-USAGE: file must not be null. pseron must not be null. i and j must reference
-    a legitimate treasure in the map.
+/**
+ * \brief Collects the treasure at the given location. Logs this event to a file.
+ * \param[in] file File to log information to.
+ * \param[in,out] items Map containing item to collect.
+ * \param[in,out] person Explorer to collect the item.
+ * \param[in] i y location of the treasure to collect.
+ * \param[in] j x location of the treasure to collect.
+ * \pre \p file must be opened in "a" mode.
+ * \post The treasure in \p items is either swapped, destroyed (and deallocated), or retained.
 */
 void collectAndLog(FILE* file, map items, explorer* person, unsigned long i, unsigned long j);
 
-/*
-PURPOSE: Logs the treasure to a file, and optionally stdout.
-USAGE: If collect == 0, then collect. Else, discard.
+/**
+ * \brief Logs a treasure to a file, and optionally stdout.
+ * \param[in] file File to log information to.
+ * \param[in] x Treasure to log.
+ * \param[in] collect If \p collect == 0, then log \p x as collected.
+ *      Else, log it as discarded.
+ * \param[in] i y location of the treasure.
+ * \param[in] j x location of the treasure.
+ * \pre \p file must be opened in "a" mode.
+ * \detail Define LOG to write the information to stdout as well as \p file.
 */
 void logTreasure(FILE* file, treasure x, int collect, unsigned long i, unsigned long j);
 
-/*
-PURPOSE: Finds the end block of a given direction.
-USAGE: Returns FAILED if out of bounds and CORRECTED if corrected.
+/**
+ * \brief Finds the final block after a movement is performed.
+ * \param[in] rows The number of rows in the map.
+ * \param[in] cols The number of cols in the map.
+ * \param[in,out] i The starting y location. Exports the new y location.
+ * \param[in,out] j The starting x location. Exports the new x location.
+ * \param[in] x The movement direction and distance.
+ * \return SUCCESS if the movement was performed correctly,
+ *          CORRECTED if the movement was corrected,
+ *          FAILED if the movement is out of bounds.
+ * \details Define AI to correct out of bounds movements.
 */
 status endBlock(unsigned long rows, unsigned long cols,
     unsigned long* i, unsigned long* j, move x);
 
-/*
-PURPOSE: Moves a location a given distance in a given direction.
-USAGE: dir must not be INVALID.
+/**
+ * \brief Moves a given distance in a given direction.
+ * \param[in] dir The direction to move.
+ * \param[in] distance The distance to move.
+ * \param[in,out] i The starting y location. Exports the new y location.
+ * \param[in,out] j The starting x location. Exports the new x location.
+ * \post Does not check if the distance is valid.
 */
 void move_dist(direction dir, unsigned long distance, unsigned long* i, unsigned long* j);
 
