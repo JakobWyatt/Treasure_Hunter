@@ -1,20 +1,23 @@
 #ifndef GUARD_LIST_H
 #define GUARD_LIST_H
 
+/**
+    \file list.h
+    \brief Contains functions and datatypes used to create and manipulate linked lists.
+ */
+
 typedef struct node_s node;
 
-/*
-PURPOSE: Type describing a node in a doubly linked list.
-IMPLEMENTATION: Contains a void pointer to the data stored in the node,
-    a pointer to the next node, and a pointer to the previous node.
-    The pointer to the next/previous node is NULL if it is the last/first node in the list.
-USAGE: The data stored in the node must be manually dynamically allocated,
-    and the type of the data stored in the node is maintained by the user.
+/**
+ * \brief Struct to describe a node in a doubly linked list.
 */
 struct node_s
 {
+    /** Pointer to the data. This must be dynamically allocated. */
     void* data;
+    /** Pointer to the next node. This is NULL if this is the last element. */
     node* next;
+    /** Pointer to the previous node. This is NULL if this is the first element. */
     node* prev;
 };
 
