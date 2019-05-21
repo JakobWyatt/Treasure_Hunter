@@ -62,6 +62,14 @@ status resolveAdventure(map items, unsigned long rows, unsigned long cols, list 
     return result;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Switch on the type of the treasure.
+ * coin: Deallocate and increase \p explorer.coin by \ref treasure.value.
+ * magic: Deallocate and increase \p explorer.magic by \ref treasure.value.
+ * gear: Use \ref treasure.compare to compare and conditionally swap the two treasures.
+ * Log with \ref logTreasure if any deallocation or swapping occured.
+ */
 void collectAndLog(FILE* file, map items, explorer* person, unsigned long i, unsigned long j)
 {
     int swapped;
@@ -91,7 +99,10 @@ void collectAndLog(FILE* file, map items, explorer* person, unsigned long i, uns
     }
 }
 
-/*If collect == 0, then collect. Else, discard.*/
+/**
+ * \internal \n \n \b Implementation:
+ * Switch on \p x.type, and log the treasure according to the assignment specification.
+ */
 void logTreasure(FILE* file, treasure x, int collect, unsigned long i, unsigned long j)
 {
     char slotStr[6];
@@ -146,6 +157,12 @@ void logTreasure(FILE* file, treasure x, int collect, unsigned long i, unsigned 
     #endif
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Move the given distance with \ref move_dist.
+ * If AI is defined, correct the location if out of bounds.
+ * If the distance is still out of bounds, return FAILED.
+ */
 status endBlock(unsigned long rows, unsigned long cols,
     unsigned long* i, unsigned long* j, move x)
 {
@@ -180,6 +197,10 @@ status endBlock(unsigned long rows, unsigned long cols,
     return result;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Depending on the direction, change the relevant coordinate.
+ */
 void move_dist(direction dir, unsigned long distance, unsigned long* i, unsigned long* j)
 {
     if (dir == LEFT)
