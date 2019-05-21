@@ -4,8 +4,16 @@
 
 #include "treasure.h"
 
-/* movements.head must not be equal to null
-file must not be NULL, and must be opened in "a" mode*/
+/**
+ * \internal \n \n \b Implementation:
+ * Iterate through the list of movements, and keep track of the current location of \p person.
+ * This is done in 2 steps:
+ *      1. Get the next movement from the list, and calculate the final block \p person will be on after this movement.
+ *          This is done with \ref endBlock.
+ *      2. Travel in the direction of the movement using \ref moveDist until the final block is reached.
+ *          Treasures are collected and logged with \ref collectAndLog.\n \n
+ *  This is done until \p movements is exhausted or an error status is set.
+ */
 status resolveAdventure(map items, unsigned long rows, unsigned long cols, list movements, explorer* person, FILE* file)
 {
     status result = COMPLETE;
