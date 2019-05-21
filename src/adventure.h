@@ -6,8 +6,19 @@
 #include "types.h"
 #include "list.h"
 
-/*
-PURPOSE: Resolve an adventure, given a map and a list of movements.
+/**
+    \file adventure.h
+    \brief Contains functions used to resolve an adventure.
+ */
+
+/**
+ * \brief Resolve an adventure, given a map and a list of movements.
+ * \param[in] items Map containing all items.
+ * \param[in] rows Number of rows in the map.
+ * \param[in] cols Number of columns in the map.
+ * \param[in] movements Movements to be made by the explorer.
+ * \param[in,out] person Explorer to collect items.
+ * \param[in] file File to write logs.
 USAGE: Returns the status: CORRECTED if any out of bounds movements
     were corrected, FAILED if out of bounds movements weren't corrected,
     and SUCCESS if the adventure completed sucessfully.
@@ -16,6 +27,8 @@ USAGE: Returns the status: CORRECTED if any out of bounds movements
     Out of bounds movements are corrected by defining AI.
     This function does not deallocate map or list.
     This function does modify the map, and removes any items it encounters.
+
+
 */
 status resolveAdventure(map items, unsigned long rows, unsigned long cols, list movements, explorer* person, FILE* file);
 

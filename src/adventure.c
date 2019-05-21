@@ -4,7 +4,7 @@
 
 #include "treasure.h"
 
-/*movements.head must not be equal to null
+/* movements.head must not be equal to null
 file must not be NULL, and must be opened in "a" mode*/
 status resolveAdventure(map items, unsigned long rows, unsigned long cols, list movements, explorer* person, FILE* file)
 {
