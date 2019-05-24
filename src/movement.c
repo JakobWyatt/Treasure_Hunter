@@ -8,12 +8,18 @@
 
 #define MOVE_LINE_BUFFER_SIZE 29
 
+
+/**
+ * \internal \n \n \b Implementation:
+ * First, open the file in "r" mode. Then, read and process each line until EOF is reached.
+ * The maximum valid line size is 29 characters long, as the largest valid integer representation
+ * in c is 22 characters long.
+ * (+ 5 characters for RIGHT direction, +1 character for space, +1 for null-terminator).
+ * Use \ref fgets to read a line of the file into this buffer. \ref parse_movement is then
+ *  used to parse the line and add the movement to \p moves.
+ */
 status read_moves(list* moves, char* filename)
 {
-    /*Read and process each line until the end of file is reached.
-    As each line has to store an integer, and the largest valid integer representation in c
-    is 22 characters long (representation + sign + number), the maximum string size needed is
-    29 characters.*/
     char line[MOVE_LINE_BUFFER_SIZE];
     status result = COMPLETE;
     char* line_read;
@@ -62,22 +68,27 @@ status read_moves(list* moves, char* filename)
     return result;
 }
 
-/*First question is pointer diagram*/
-/*Second question: write program*/
-/*Marks are awarded for linked lists*/
-/*Dont have to write linked_list.c
-Just need the concept of linked lists - write all the code yourself*/
 
+/**
+ * \internal \n \n \b Implementation:
+ * First, allocate space for the move and add it to the end of \p moves.
+ * Doing this early on reduces the chance memory safety is programmed incorrectly.
+ * Modifying \p moves is okay, as strong exception safety is not guarenteed by this function.
+ * 
+ * Next, check for a space in the line.
+ * This is the seperator between the direction and the distance.
+ * If there are no spaces in the line, the string is incorrectly formatted and the algorithm ends.
+ * 
+ * Finally, parse the direction with \ref choose_dir
+ *  and the distance with \ref sscanf, and check for errors.
+ */
 status parse_movement(list* moves, char* line)
 {
-    /*Does not check for broken allocation*/
     status result = COMPLETE;
     char* space = strchr(line, ' ');
     int args_read = 0;
 
-    /*We do not guarentee strong exception safety, so allocation and
-    addition to the list can be done immidiately. This improves the chance
-    we get memory safety right.*/
+    /*Does not check for failed allocation*/
     move* data = (move*)malloc(sizeof(move));
     insert(moves, NULL, data);
 
@@ -110,6 +121,11 @@ status parse_movement(list* moves, char* line)
     return result;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * First, convert the string to lowercase.
+ * Next, use a simple else-if ladder to choose the correct direction.
+ */
 direction choose_dir(char* str)
 {
     direction dir;
@@ -134,29 +150,41 @@ direction choose_dir(char* str)
     return dir;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Use a simple else-if ladder to determine the direction,
+ *  and print the corresponding string into \p str.
+ * Another method of implementing this would be to create an
+ * array linking enumerations to strings.
+ */
 void direction_to_string(direction d, char* str)
 {
     if (d == UP)
     {
-        strncpy(str, "UP", 6);
+        strncpy(str, "UP", 8);
     } else if (d == DOWN)
     {
-        strncpy(str, "DOWN", 6);
+        strncpy(str, "DOWN", 8);
     } else if (d == LEFT)
     {
-        strncpy(str, "LEFT", 6);
+        strncpy(str, "LEFT", 8);
     } else if (d == RIGHT)
     {
-        strncpy(str, "RIGHT", 6);
+        strncpy(str, "RIGHT", 8);
     } else if (d == INVALID)
     {
-        strncpy(str, "INVALID", 6);
+        strncpy(str, "INVALID", 8);
     }
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Convert the direction to a string with \ref direction_to_string,
+ *  and print both the direction and distance to stdout.
+ */
 void print_move(void* m)
 {
-    char str[6];
+    char str[8];
     move* a = (move*)m;
     direction_to_string(a->dir, str);
     printf("\n%s %d", str, a->distance);
