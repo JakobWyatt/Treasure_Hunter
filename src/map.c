@@ -275,7 +275,7 @@ char* read_line(FILE* file)
  *      if all delimiters have been found or not. To resolve this, find the next
  *      character that is either a delimiter or a null terminator.
  * If it is a null terminator, then we have read the correct number of tokens,
- *  and the algorithm ends with status COMPLETED.
+ *  and the algorithm ends with status COMPLETE.
  * If it is a delimiter, we still have token(s) we have not read yet,
  *  and the algorithm ends with status ABORTED.
  */
