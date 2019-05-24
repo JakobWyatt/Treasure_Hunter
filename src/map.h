@@ -42,50 +42,58 @@ map allocate_map(size_t rows, size_t cols);
  */
 void free_map(map x, size_t rows, size_t cols);
 
-/*
-PURPOSE: Fills a map with information from a file.
-USAGE: Imports rows, cols, and file. Exports read_into and status.
-    Assumes that read_into has already been allocated correctly and
-        file is not null.
-    If any errors or invalid rows are encountered,
-        an error message is written to stderr and the returned status is ABORTED.
-    Otherwise, the returned status is COMPLETE.
-*/
-
 /**
- * \brief Fills a map
- * \param[in,out] read_into The map to read values into. This must be created with
- *      \ref allocate_map.
+ * \brief Fills a map with information from a csv file.
+ * \param[in,out] read_into The map to read values into.
  * \param[in] rows The number of rows in the map.
  * \param[in] cols The number of columns in the map.
- * \param[in] 
+ * \param[in] file The file to read from.
+ * \pre \p read_into must be created with \ref allocate_map.
+ * \pre \p file must be opened in "r" mode.
+ * \post \p file is not closed by this function.
+ * \return If an error occurs, return ABORTED. Otherwise, return COMPLETE.
+ * \details Writes to stderr if an error occurs.
  */
 status fill_map(map read_into, size_t rows, size_t cols, FILE* file);
 
-/*
-PURPOSE: Reads a line from a file.
-USAGE: Reads from a file until newline or EOF is encountered.
-    Newline is not included in the returned string.
-    If an attempt to read from the file immediately results in EOF,
-        an empty string is returned.
-    The returned string must be freed after use.
-*/
+/**
+ * \brief Reads a line from a file.
+ * \param[in] file The file to read from.
+ * \return The line that has been read from the file.
+ * \pre \p file must be opened in "r" mode.
+ * \post \ref free must be called on the returned string after use.
+ * \post 
+ * \details Reads until a newline or EOF is encountered.
+ *      The newline is not included in the returned string.
+ *      If no characters can be read, an empty string ('\0') is returned.
+ */
 char* read_line(FILE* file);
 
-/*
-PURPOSE: Splits a string with the given delimiter.
-USAGE: tokens is a pointer to an array of char*.
-    Each token is stored in tokens as it is parsed.
-    If the number of tokens is not equal to tokens_sz, ABORTED is returned.
-    Otherwise, COMPLETE is returned.
-    Strings stored in tokens remain in scope as long as line remains in scope.
-*/
+/**
+ * \brief Splits a string into tokens, seperated by the given delimiter.
+ * \param[in,out] line The string to split.
+ * \param[in] delim The delimiter to split the string on.
+ * \param[out] tokens An array of char*.
+ *      Each element in the array points to a null-terminated token string.
+ *      These tokens are "stored" in \p line.
+ * \param[in] tokens_sz The size of \p tokens.
+ * \return If the amount of potential tokens in \p line does not equal
+ *      \p tokens_sz, return ABORTED. Otherwise, return COMPLETE.
+ * \post \p line should not be read after splitting.
+ * \details The delimiter is not included in a token.
+ *      If multiple delimiters occur in order,
+ *          the corresponding tokens are empty strings.
+ *      The lifetime of \p tokens is equal to the lifetime of \p line.
+ */
 status split(char* line, char delim, char** tokens, size_t tokens_sz);
 
-/*
-PURPOSE: Prints a map to stdout.
-USAGE: For debugging purposes.
+/**
+ * \brief Prints a map to stdout.
+ * \param[in] x The map to print.
+ * \param[in] rows The number of rows in the map.
+ * \param[in] cols The number of columns in the map.
+ * \details Used for debugging purposes.
 */
-void print_map(map, size_t rows, size_t cols);
+void print_map(map x, size_t rows, size_t cols);
 
 #endif
