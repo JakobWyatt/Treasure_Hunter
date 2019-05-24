@@ -21,50 +21,59 @@ struct node_s
     node* prev;
 };
 
-/*
-PURPOSE: Type describing a linked list.
-IMPLEMENTATION: Contains a pointer to the first element in the list
-    and a pointer to the last element in the list.
-USAGE: Use the functions declared in list.h to manipulate the list.
+/**
+ * \brief Function pointer that performs an operation on \ref node.data
 */
+typedef void (*data_func)(void*);
+
+/**
+ * \brief Struct to contain a doubly referenced linked list.
+ */
 typedef struct
 {
+    /** Pointer to the head node. */
     node* head;
+    /** Pointer to the tail node. */
     node* tail;
 } list;
 
-/*
-PURPOSE: Insert an element before the given element.
-USAGE: data must be dynamically allocated.
-If iter == NULL, insert the element at the end of the list.
-*/
+/**
+ * \brief Insert an element into a linked list.
+ * \param[in,out] x The list to insert into.
+ * \param[in] iter Insert before this element. If \p iter is NULL,
+ *      insert at the end of the list.
+ * \param[in] data The pointer to data that will be stored by the node.
+ */
 void insert(list* x, node* iter, void* data);
 
-/*
-PURPOSE: Deallocates and removes the given element.
-USAGE: Pass a pointer to the element to remove.
-*/
+/**
+ * \brief Remove a node from a linked list.
+ * \param[in,out] x The list to remove the node from.
+ * \param[in,out] iter The node to remove.
+ * \details Calls \ref free() on \p iter.data
+ */
 void remove_node(list* x, node* iter);
 
-/*
-PURPOSE: Creates an empty list.
-USAGE: Use this to create a list initially.
+/**
+ * \brief Initializes an empty list.
+ * \return The empty list.
+ * \details The list struct is statically allocated (on the stack).
 */
 list make_list();
 
-/*
-PURPOSE: Free all elements.
-USAGE: Each element on the linked list must be dynamically allocated,
-    with no unique pointers to dynamically allocated members.
-*/
+/**
+ * \brief Free all elements in the list.
+ * \param[in,out] x The list to free.
+ * \details Calls \ref free() on \p node.data for all nodes.
+ */
 void free_list(list* x);
 
-/*
-PURPOSE: Apply the given function to all elements.
-USAGE: func must not be null.
-*/
-typedef void (*for_each_func)(void*);
-
-void for_each(list x, for_each_func func);
+/**
+ * \brief Applies a function to every \ref node in the \ref list.
+ * \param[in] x The list to apply \p func to.
+ * \param[in] func The function to apply to every node.
+ * \details \p func is called on each \ref node in order.
+ */
+void for_each(list x, data_func func);
 
 #endif
