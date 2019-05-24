@@ -6,6 +6,16 @@
 
 #include "treasure.h"
 
+/**
+ * \internal \n \n \b Implementation:
+ * This function performs the majority of file opening, size determination, and allocation.
+ * If there is an error in any of the stages listed below, perform any neccesary cleanup
+ *  and exit the function.
+ * -# Open the file in "r" mode.
+ * -# Read the size of the map.
+ * -# Allocate the map with \ref allocate_map.
+ * -# Read values into the map with \ref fill_map.
+ */
 status read_map(map* read_into, size_t* rows, size_t* cols, char* filename)
 {
     status result = COMPLETE;
@@ -51,6 +61,16 @@ status read_map(map* read_into, size_t* rows, size_t* cols, char* filename)
     return result;
 }
 
+
+/**
+ * \internal \n \n \b Implementation:
+ * The map consists of an array of arrays. Allocate the top level array first.
+ * If this was successful, then allocate rows one at a time.
+ * If row allocation fails at any point, iterate backwards through the row arrays
+ *      that have already been allocated, and free them.
+ * After allocation, set the type of each map element to 'N'. This represents the
+ *      map having no elements, and allows deallocation to work as expected.
+ */
 map allocate_map(size_t rows, size_t cols)
 {
     map result = (map)malloc(sizeof(treasure*) * rows);
@@ -96,6 +116,15 @@ map allocate_map(size_t rows, size_t cols)
     return result;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * The only dynamically allocated element in \ref treasure is
+ *  the detail string.
+ * First, iterate through the map and deallocate any detail strings
+ *  if the type is either 'G' (gear) or 'M' (magic).
+ * Next, deallocate each row array.
+ * Finally, deallocate the column array.
+ */
 void free_map(map x, size_t rows, size_t cols)
 {
     size_t i;
@@ -115,6 +144,17 @@ void free_map(map x, size_t rows, size_t cols)
     free(x);
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Stop reading the file as soon as incorrect formatting is encountered.
+ * While there are still empty map rows:
+ *  -# Read the current line of the file with \ref read_line.
+ *  -# Split the line with \ref split.
+ *  -# If the correct number of tokens has been read, convert each token
+ *      into a treasure with \ref make_treasure and add it to the map.
+ * Any errors are printed to stderr.
+ * Strtok cannot be used for this function, as it skips repeated delimiters.
+ */
 status fill_map(map read_into, size_t rows, size_t cols, FILE* file)
 {
     size_t i = 0;
@@ -125,15 +165,6 @@ status fill_map(map read_into, size_t rows, size_t cols, FILE* file)
     /*As soon as incorrect formatting is encountered, stop reading the file*/
     while (i < rows && result == COMPLETE)
     {
-        /*To fill the map, we will:
-            -Read the line.
-            -Split the line using split.
-            -Use make_treasure to construct a new treasure, and add it to the map.
-
-            strtok cannot be used, as it skips over repeated delimiters.
-            Creating a function to read up until a delimiter can be used,
-                however it complicates matters when the file does not end with a newline.
-        */
         line = read_line(file);
         result = split(line, ',', tokens, cols);
         if (result == COMPLETE)
@@ -171,20 +202,28 @@ status fill_map(map read_into, size_t rows, size_t cols, FILE* file)
     return result;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * \ref read_line attemps to read a line from a file using fgets,
+ *      with an initial buffer size of 100. If the last character
+ *      in the string has been overwritten then the buffer is
+ *      assumed to be too small, and a bigger buffer is allocated.
+ *      The file position is then returned to its state at the
+ *      start of the function, and reading is attempted again.
+ *      This process is repeated until the entire line has been read.
+ * Any newline characters in the string are found with strchr, and removed.
+ */
 char* read_line(FILE* file)
 {
-    /*
-    Attempt to read a line from a file with fgets.
-    If the line was too big for the buffer,
-    create a bigger array and try to read again.
-    */
     int size = 100;
     char* str = malloc(sizeof(char) * size);
     long pos = ftell(file);
     char* error = str;
     char* end;
-    str[size - 1] = 1;
-    fgets(str, size, file);
+    /*Set the final character,
+    to check if it has been overwritten or not.*/
+    str[size - 1] = 'A';
+    error = fgets(str, size, file);
 
     while (str[size - 1] == '\0' && error != NULL)
     {
@@ -193,7 +232,7 @@ char* read_line(FILE* file)
         /*Does not check for allocation faliure*/
         str = malloc(sizeof(char) * size);
         fseek(file, pos, SEEK_SET);
-        str[size - 1] = 1;
+        str[size - 1] = 'A';
         error = fgets(str, size, file);
     }
 
@@ -215,6 +254,31 @@ char* read_line(FILE* file)
     return str;
 }
 
+
+/**
+ * \internal \n \n \b Implementation:
+ * The gist of this function is quite simple, although the implementation
+ * becomes more complex as error checking is introduced.
+ * At its core, this algorithm:
+ *  -# Finds the next delimiter in \p line.
+ *  -# Assigns the location of the delimiter in \p line to '\0'.
+ *  -# Adds a new element to \p tokens, located 1 after the delimiter.
+ *          This is the start of the next token.
+ * 
+ * Now, assume that the above algorithm ends when either:
+ *  - The end of the string has been reached.
+ *  - The token array is full.
+ * 
+ * If the number of tokens is less than tokens_sz, there are too few tokens
+ * in \p line and the algorithm ends with status ABORTED.
+ * However, if the number of tokens is equal to tokens_sz, it is not yet known
+ *      if all delimiters have been found or not. To resolve this, find the next
+ *      character that is either a delimiter or a null terminator.
+ * If it is a null terminator, then we have read the correct number of tokens,
+ *  and the algorithm ends with status COMPLETED.
+ * If it is a delimiter, we still have token(s) we have not read yet,
+ *  and the algorithm ends with status ABORTED.
+ */
 status split(char* line, char delim, char** tokens, size_t tokens_sz)
 {
     size_t li = 0;
@@ -224,7 +288,8 @@ status split(char* line, char delim, char** tokens, size_t tokens_sz)
     /*The first token starts at the beginning of the string*/
     tokens[0] = line;
     
-    while(line[li] != '\0')
+    /*Ensure the token array doesn't go out of bounds.*/
+    while(line[li] != '\0' && ti < tokens_sz)
     {
         if (line[li] == delim)
         {
@@ -237,13 +302,32 @@ status split(char* line, char delim, char** tokens, size_t tokens_sz)
         ++li;
     }
 
-    if (ti != tokens_sz)
+    /*
+    Check for errors
+    */
+    if (ti < tokens_sz)
     {
         result = ABORTED;
+    } else
+    {
+        while (line[li] != '\0' && line[li] != delim)
+        {
+            ++li;
+        }
+        if (line[li] != '\0')
+        {
+            result = ABORTED;
+        }
     }
+
     return result;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Iterate through the map, printing each treasure using \ref print(treasure).
+ * Also print information about the location of the treasure (row and column).
+ */
 void print_map(map x, size_t rows, size_t cols)
 {
     size_t i;
