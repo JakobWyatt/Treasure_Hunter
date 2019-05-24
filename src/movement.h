@@ -5,7 +5,7 @@
 #include "list.h"
 
 /**
-    \file map.h
+    \file movement.h
     \brief Contains functions to read movements from a file into a linked list.
 */
 
