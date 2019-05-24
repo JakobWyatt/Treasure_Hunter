@@ -1,16 +1,16 @@
 #ifndef GUARD_TYPES_H
 #define GUARD_TYPES_H
 
-typedef struct explorer_s explorer;
-typedef struct treasure_s treasure;
+typedef struct explorer explorer;
+typedef struct treasure treasure;
 
-/*
-PURPOSE: Represent the type of the treasure compare function.
-IMPLEMENTATION: Typedef of function pointer.
-USAGE: Compares the gear with the persons corresponding gear,
-    and swap them if the persons gear is worse. Returns 0
-    if a swap occured.
-*/
+/**
+ * \brief Compares the gear with the person gear in the corresponding slot.
+ *      If the person gear is worse, swap the gear objects and return 0.
+ *      Otherwise, return 1.
+ * Preconditions: person must have been initialized with \ref make_explorer.
+ * gear must have been initialized with \ref make_treasure.
+ */
 typedef int (*compare_func)(treasure* gear, explorer* person);
 
 /*
@@ -41,7 +41,7 @@ IMPLEMENTATION: Struct containing the type of treasure:
     (only valid for type='G')
 USAGE: Owned by either the map or explorer.
 */
-struct treasure_s
+struct treasure
 {
     char type;
     int value;
@@ -57,7 +57,7 @@ USAGE: explorer owns its treasure objects. If a treasure object has type 'N'
     and value < 0,
     then the explorer does not have any gear on that body part.
 */
-struct explorer_s
+struct explorer
 {
     int magic;
     int coin;
