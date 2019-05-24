@@ -51,7 +51,7 @@ void collectAndLog(FILE* file, map items, explorer* person, unsigned long i, uns
  * \param[in] i y location of the treasure.
  * \param[in] j x location of the treasure.
  * \pre \p file must be opened in "a" mode.
- * \detail Define LOG to write the information to stdout as well as \p file.
+ * \details Define LOG to write the information to stdout as well as \p file.
 */
 void logTreasure(FILE* file, treasure x, int collect, unsigned long i, unsigned long j);
 
