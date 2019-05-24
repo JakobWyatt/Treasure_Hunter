@@ -3,59 +3,81 @@
 
 #include "types.h"
 
-/********************
-Function declarations
-********************/
-
-/*
-PURPOSE: Parses the string and overwrites make's data.
-USAGE: If the string was invalid, print the error to stderr and
-    return ABORTED. Otherwise, return COMPLETE.
+/**
+    \file treasure.h
+    \brief Contains functions to create and manipulate \ref treasure structs.
 */
+
+/**
+ * \brief Parses \p str to create a treasure object.
+ * \param[in] str The string to parse.
+ * \param[out] make The created treasure.
+ * \pre \p str must be null-terminated, and must not be NULL.
+ * \pre \p make must be dynamically allocated (on the heap) before calling this function.
+ * \post If \p str is empty, \p make->type == 'N'.
+ * \return If the string is invalid, return ABORTED.
+ *      Otherwise, return COMPLETE.
+ * \details If the string is invalid, print an error message to stderr.
+ */
 status make_treasure(char* str, treasure* make);
 
-/*
-PURPOSE: Swap the two treasures.
-USAGE: Imports two pointers to the treasures to be swapped.
-*/
+/**
+ * \brief Swaps two treasures.
+ * \param[in,out] a The first treasure to swap.
+ * \param[in,out] b The second treasure to swap.
+ * \pre \p a and \p b must not be NULL.
+ */
 void swap(treasure* a, treasure* b);
 
-/*
-PURPOSE: Chooses the corresponding compare_func for a given string.
-USAGE: If str is invalid, compare_func is NULL.
-*/
+/**
+ * \brief Chooses a compare function given a body part.
+ * \param[in] str The string representing a body part.
+ * \return A function pointer to the correct compare function.
+ * \post If \p str is invalid, return NULL.
+ */
 compare_func chooseCompareFunc(char* str);
 
-/*
-PURPOSE: Writes the textual representation of the slot into the string.
-USAGE: The number of bytes in string must be >= 6.
-*/
+/**
+ * \brief Writes the textual representation of the gear slot into the string.
+ * \param[in] x The treasure containing the gear slot.
+ * \param[out] str The string to write the representation into.
+ * \pre \p str must be able to hold at least 6 characters.
+ * \details If \p x.type != 'G', do not modify \p str.
+ */
 void slot(treasure x, char* str);
 
-/*
-PURPOSE: Converts the given string to lowercase.
-USAGE: str must be null-terminated.
-*/
+/**
+ * \brief Converts the given string to lowercase.
+ * \param[in,out] str The string to convert to lowercase.
+ */
 void toLowerStr(char* str);
 
-/*
-PURPOSE: Prints a treasures information to stdout.
-USAGE: For debugging.
-*/
+/**
+ * \brief Prints a treasure to stdout.
+ * \param[in] x The treasure to print.
+ * \details Used for debugging. If \p x.type == 'N',
+ *      do not print anything.
+ */
 void print(treasure x);
 
-/*
-Implementation of compare_func for head, chest, legs, and hands gear.
-ASSERTIONS:
-gear.value is defined.
-*/
-
+/**
+ * \brief Implementation of \ref compare_func for the head slot.
+ */
 int compareHead(treasure* gear, explorer* person);
 
+/**
+ * \brief Implementation of \ref compare_func for the head slot.
+ */
 int compareChest(treasure* gear, explorer* person);
 
+/**
+ * \brief Implementation of \ref compare_func for the head slot.
+ */
 int compareLegs(treasure* gear, explorer* person);
 
+/**
+ * \brief Implementation of \ref compare_func for the head slot.
+ */
 int compareHands(treasure* gear, explorer* person);
 
 #endif
