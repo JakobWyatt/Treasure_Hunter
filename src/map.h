@@ -6,30 +6,40 @@
 
 #include "types.h" /*status*/
 
-/********************
-Function declarations
-********************/
+/**
+    \file map.h
+    \brief Contains functions to read, allocate, and free a 2D map.
+ */
 
-/*
-PURPOSE: Reads in a map from a file.
-USAGE: Imports filename. Exports read_into, rows, cols, and status.
-    If an error was encountered, it is written to stderr and the returned status is
-    ABORTED. Otherwise, the returned status is COMPLETE.
-    Use free_map(map, size_t, size_t) to free the data after use.
-    This should only be done if the status == COMPLETE.
-*/
+/**
+ * \brief Reads in a map from a file.
+ * \param[out] read_into Pointer to the created map.
+ * \param[out] rows The number of rows in the map.
+ * \param[out] cols The number of cols in the map.
+ * \param[in] filename The name of the file to read into.
+ * \return If an error occurs, returns ABORTED. Otherwise,
+ *      returns COMPLETE.
+ * \post \p read_into must be deallocated with \ref free_map.
+ * \details Writes to stderr if an error has occured. Only deallocate \p read_into
+ *      if this function returns COMPLETE.
+ */
 status read_map(map* read_into, size_t* rows, size_t* cols, char* filename);
 
-/*
-PURPOSE: Dynamically allocates a map (2d array of treasure).
-USAGE: Returns a dynamically allocated map. If map==NULL, allocation failed.
-*/
+/**
+ * \brief Allocates a map dynamically (on the heap).
+ * \param[in] rows The number of rows in the map.
+ * \param[in] cols The number of columns in the map.
+ * \return The allocated map. This is NULL if allocation failed.
+ * \post \ref free_map must be called on the returned map if it is not NULL.
+ */
 map allocate_map(size_t rows, size_t cols);
 
-/*
-PURPOSE: Deallocates a map.
-USAGE: After map has been used, deallocate it.
-*/
+/**
+ * \brief Deallocates a map that has been created with \ref allocate_map.
+ * \param[in,out] x The map to free.
+ * \param[in] rows The number of rows in the map.
+ * \param[in] cols The number of columns in the map.
+ */
 void free_map(map x, size_t rows, size_t cols);
 
 /*
@@ -41,6 +51,15 @@ USAGE: Imports rows, cols, and file. Exports read_into and status.
         an error message is written to stderr and the returned status is ABORTED.
     Otherwise, the returned status is COMPLETE.
 */
+
+/**
+ * \brief Fills a map
+ * \param[in,out] read_into The map to read values into. This must be created with
+ *      \ref allocate_map.
+ * \param[in] rows The number of rows in the map.
+ * \param[in] cols The number of columns in the map.
+ * \param[in] 
+ */
 status fill_map(map read_into, size_t rows, size_t cols, FILE* file);
 
 /*
