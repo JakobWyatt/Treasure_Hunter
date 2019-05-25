@@ -29,7 +29,7 @@ bash ../test/single_test.sh ../test/default.csv ../test/no_space.lst \
 
 #test invalid map
 bash ../test/single_test.sh ../test/incorrect_rows.csv ../test/default.lst \
-    ../test/default.txt ../test/empty.log incorrect_rows
+    ../test/incorrect_rows.txt ../test/empty.log incorrect_rows
 
 bash ../test/single_test.sh ../test/incorrect_cols.csv ../test/default.lst \
     ../test/default.txt ../test/empty.log incorrect_cols
