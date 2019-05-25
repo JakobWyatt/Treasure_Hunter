@@ -20,7 +20,7 @@ bash ../test/single_test.sh ../test/default.csv ../test/invalid_dir.lst \
     ../test/invalid_dir.txt ../test/empty.log invalid_dir
 
 bash ../test/single_test.sh ../test/default.csv ../test/invalid_dist.lst \
-    ../test/default.txt ../test/empty.log invalid_dist
+    ../test/invalid_dist.txt ../test/empty.log invalid_dist
 
 bash ../test/single_test.sh ../test/default.csv ../test/no_space.lst \
     ../test/default.txt ../test/empty.log no_space_list
