@@ -1,6 +1,6 @@
 DOWN 2
 RIGHT 2
-DOWn 2
+DOWn %s
 up 0
 LEFT 1
 UP 3
