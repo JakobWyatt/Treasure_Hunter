@@ -22,8 +22,10 @@ bash ../test/single_test.sh ../test/default.csv ../test/invalid_dir.lst \
 bash ../test/single_test.sh ../test/default.csv ../test/invalid_dist.lst \
     ../test/invalid_dist.txt ../test/empty.log invalid_dist
 
+#Error message isn't perfect here: doesn't state file name,
+#makes it ambiguous whether or not the map or list has an error.
 bash ../test/single_test.sh ../test/default.csv ../test/no_space.lst \
-    ../test/default.txt ../test/empty.log no_space_list
+    ../test/no_space_list.txt ../test/empty.log no_space_list
 
 #test invalid map
 bash ../test/single_test.sh ../test/incorrect_rows.csv ../test/default.lst \
