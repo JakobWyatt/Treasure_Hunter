@@ -3,6 +3,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+/**
+ * \internal \n \n \b Implementation:
+ * Initialize magic and coin to 0.
+ * Initialize gear.type to 'N'.
+ * Initialize gear.value to -1, so that when compared
+ * the empty slot is always initially swapped.
+ */
 explorer make_explorer()
 {
     explorer ex;
@@ -19,6 +26,10 @@ explorer make_explorer()
     return ex;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * If gear.type == 'G' (non-empty), free the corresponding detail string.
+ */
 void free_explorer(explorer ex)
 {
     if (ex.head.type == 'G')
@@ -39,6 +50,11 @@ void free_explorer(explorer ex)
     }
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Simple else-if ladder to read the correct string
+ * into \p text_rep.
+ */
 void status_text(status s, char* text_rep)
 {
     if (s == COMPLETE)
@@ -56,6 +72,11 @@ void status_text(status s, char* text_rep)
     }
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * If gear.type == 'G' (there is gear in that slot),
+ * increment the accumulator by that gear's value.
+ */
 int gear_value(explorer ex)
 {
     int value = 0;
