@@ -14,7 +14,7 @@ bash ../test/single_test.sh ../test/default.csv ../test/empty_list.lst \
     ../test/empty_list.txt ../test/empty.log empty_list
 
 bash ../test/single_test.sh ../test/empty_map.csv ../test/default.lst \
-    ../test/default.txt ../test/empty.log empty_map
+    ../test/empty_map.txt ../test/empty.log empty_map
 
 bash ../test/single_test.sh ../test/default.csv ../test/invalid_dir.lst \
     ../test/default.txt ../test/empty.log invalid_dir
