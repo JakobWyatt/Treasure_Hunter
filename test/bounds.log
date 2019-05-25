@@ -1,11 +1,11 @@
----                                                                             
----                                                                             
----                                                                             
+---
+---
+---
 COLLECT<ITEM:GEAR, XLOC:0, YLOC:1, DESCRIPTION:Thorn armour, SLOT:chest, VALUE:120>
 COLLECT<ITEM:GEAR, XLOC:1, YLOC:1, DESCRIPTION:Vibranium Shield, SLOT:hands, VALUE:990>
-COLLECT<ITEM:MAGIC, XLOC:2, YLOC:0, DESCRIPTION:Healing Potion, VALUE:85>       
-COLLECT<ITEM:MAGIC, XLOC:2, YLOC:2, DESCRIPTION:Defence Enchantment, VALUE:360> 
-COLLECT<ITEM:MAGIC, XLOC:3, YLOC:1, DESCRIPTION:Phoenix Blood, VALUE:291>       
+COLLECT<ITEM:MAGIC, XLOC:2, YLOC:0, DESCRIPTION:Healing Potion, VALUE:85>
+COLLECT<ITEM:MAGIC, XLOC:2, YLOC:2, DESCRIPTION:Defence Enchantment, VALUE:360>
+COLLECT<ITEM:MAGIC, XLOC:3, YLOC:1, DESCRIPTION:Phoenix Blood, VALUE:291>
 COLLECT<ITEM:GEAR, XLOC:4, YLOC:1, DESCRIPTION:IDEK_ANYMORE, SLOT:head, VALUE:21>
 COLLECT<ITEM:GEAR, XLOC:5, YLOC:1, DESCRIPTION:Crimson Plate, SLOT:chest, VALUE:1020>
 DISCARD<ITEM:GEAR, XLOC:5, YLOC:1, DESCRIPTION:Thorn armour, SLOT:chest, VALUE:120>
