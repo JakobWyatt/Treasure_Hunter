@@ -187,10 +187,10 @@ status fill_map(map read_into, size_t rows, size_t cols, FILE* file)
             Otherwise, there is an incorrect number of columns.*/
             if (feof(file))
             {
-                fprintf(stderr, "Incorrect number of rows: read %lu, expected %lu.\n", (unsigned long)i + 1, (unsigned long)rows);
+                fprintf(stderr, "Incorrect number of rows: read %lu, expected %lu.\n", (unsigned long)i, (unsigned long)rows);
             } else
             {
-                fprintf(stderr, "Incorrect number of columns at line %lu: expected %lu.\n", (unsigned long)i + 2, (unsigned long)cols);
+                fprintf(stderr, "Incorrect number of columns at line %lu: expected %lu.\n", (unsigned long)i + 1, (unsigned long)cols);
             }
         }
         ++i;
