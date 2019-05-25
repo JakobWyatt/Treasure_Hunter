@@ -19,10 +19,10 @@ status resolveAdventure(map items, unsigned long rows, unsigned long cols, list 
     status result = COMPLETE;
     status temp_result = COMPLETE;
     /*Iterate through the list of movements, keeping track of where we've been so far*/
-    unsigned long end_i = 0;
-    unsigned long end_j = 0;
-    unsigned long i = 0;
-    unsigned long j = 0;
+    long end_i = 0;
+    long end_j = 0;
+    long i = 0;
+    long j = 0;
     /*The control flow of our algorithm is
     get_end -> Check for error -> (Traverse map, log as we go)*/
     node* current = movements.head;
@@ -70,7 +70,7 @@ status resolveAdventure(map items, unsigned long rows, unsigned long cols, list 
  * gear: Use \ref treasure.compare to compare and conditionally swap the two treasures.
  * Log with \ref logTreasure if any deallocation or swapping occured.
  */
-void collectAndLog(FILE* file, map items, explorer* person, unsigned long i, unsigned long j)
+void collectAndLog(FILE* file, map items, explorer* person, long i, long j)
 {
     int swapped;
     treasure temp;
@@ -103,7 +103,7 @@ void collectAndLog(FILE* file, map items, explorer* person, unsigned long i, uns
  * \internal \n \n \b Implementation:
  * Switch on \p x.type, and log the treasure according to the assignment specification.
  */
-void logTreasure(FILE* file, treasure x, int collect, unsigned long i, unsigned long j)
+void logTreasure(FILE* file, treasure x, int collect, long i, long j)
 {
     char slotStr[6];
     switch (x.type)
@@ -164,7 +164,7 @@ void logTreasure(FILE* file, treasure x, int collect, unsigned long i, unsigned 
  * If the distance is still out of bounds, return FAILED.
  */
 status endBlock(unsigned long rows, unsigned long cols,
-    unsigned long* i, unsigned long* j, move x)
+    long* i, long* j, move x)
 {
     status result = COMPLETE;
     /*Move distance, correct, check bounds.*/
@@ -189,7 +189,7 @@ status endBlock(unsigned long rows, unsigned long cols,
         result = COMPLETE;
     }
     #endif
-
+     
     if (*i < 0 || *i >= rows || *j < 0 || *j >= cols)
     {
         result = FAILED;
@@ -201,7 +201,7 @@ status endBlock(unsigned long rows, unsigned long cols,
  * \internal \n \n \b Implementation:
  * Depending on the direction, change the relevant coordinate.
  */
-void move_dist(direction dir, unsigned long distance, unsigned long* i, unsigned long* j)
+void move_dist(direction dir, unsigned long distance, long* i, long* j)
 {
     if (dir == LEFT)
     {

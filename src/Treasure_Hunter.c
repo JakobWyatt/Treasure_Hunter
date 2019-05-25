@@ -47,8 +47,12 @@ int main(int argc, char* argv[])
             /* Resolve the adventure and print the result. */
             adventure_result = resolveAdventure(x, rows, cols, y, &person, logger);
             status_text(adventure_result, final_status);
-            printf("STATUS: %s\nCOINS: %d\nMAGIC: %d\nGEAR: %d\n", final_status,
-                person.coin, person.magic, gear_value(person));
+            printf("STATUS: %s\n", final_status);
+            if (adventure_result != FAILED && adventure_result != ABORTED)
+            {
+                printf("COINS: %d\nMAGIC: %d\nGEAR: %d\n", person.coin,
+                person.magic, gear_value(person));
+            }
         }
 
         /* Clean up memory and files. */
