@@ -4,7 +4,22 @@
 #include <ctype.h> /*toupper*/
 #include <string.h> /*strchr*/
 
-/*TODO: Split this into multiple functions*/
+/**
+ * \internal \n \n \b Implementation:
+ * The first character in the string is the type of \ref treasure.
+ * - If the type is 'C' (coin), then read in the value of the treasure.
+ * - If the type is 'M' (magic), then:
+ *      -# Find the first colon in the string.
+ *      -# Copy the detail string from \p str + 2 to the seperator.
+ *          This skips the type character, and the space after the type character.
+ *      -# Parse the value, located at one past the seperator to the end of \p str.
+ * - If the type is 'G' (gear), then:
+ *      -# Find both delimiters ':' in the string.
+ *      -# Copy the detail string from \p str + 2 to the seperator.
+ *      -# Find the gear slot with \ref chooseCompareFunc. This is located between the two seperators.
+ *      -# Parse the value, located at one past the second seperator to the end of \p str.
+ * - If the type is '\0', then \p str is empty and the type of treasure is 'N' (none).
+ */
 status make_treasure(char* str, treasure* make)
 {
     status result = COMPLETE;
@@ -96,6 +111,10 @@ status make_treasure(char* str, treasure* make)
     return result;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Create a temporary variable and use it to swap the two values.
+ */
 void swap(treasure* a, treasure* b)
 {
     treasure tmp = *a;
@@ -103,6 +122,12 @@ void swap(treasure* a, treasure* b)
     *b = tmp;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * First, convert the string to lowercase.
+ * Next, use a simple else-if ladder to determine
+ * which \ref compare_func to use.
+ */
 compare_func chooseCompareFunc(char* str)
 {
     compare_func func = NULL;
@@ -124,6 +149,11 @@ compare_func chooseCompareFunc(char* str)
     return func;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Use a simple else-if ladder to determine which string to use,
+ * comparing the \p x.compare function pointer.
+ */
 void slot(treasure x, char* str)
 {
     if (x.compare == &compareHead)
@@ -141,6 +171,11 @@ void slot(treasure x, char* str)
     }
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Iterate through the string, using \ref tolower to convert
+ * each character to lowercase.
+ */
 void toLowerStr(char* str)
 {
     while (*str != '\0')
@@ -150,6 +185,16 @@ void toLowerStr(char* str)
     }
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * If the type is 'N', do not print anything.
+ * All non-empty \ref treasures have types and values.
+ * These are printed.
+ * If the type is not 'C' (coin), the treasure has a detail string.
+ * This is printed.
+ * If the type is 'G' (gear), print the slot it refers to.
+ *      This uses \ref slot to convert \p x.compare into a string.
+ */
 void print(treasure x)
 {
     char slot_str[6];
@@ -169,6 +214,10 @@ void print(treasure x)
     }
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * 
+ */
 int compareHead(treasure* gear, explorer* person)
 {
     int result = 1;
@@ -180,6 +229,10 @@ int compareHead(treasure* gear, explorer* person)
     return result;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Same as \ref compareHead, except the Chest slot is compared instead.
+ */
 int compareChest(treasure* gear, explorer* person)
 {
     int result = 1;
@@ -191,6 +244,10 @@ int compareChest(treasure* gear, explorer* person)
     return result;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Same as \ref compareHead, except the Legs slot is compared instead.
+ */
 int compareLegs(treasure* gear, explorer* person)
 {
     int result = 1;
@@ -202,6 +259,10 @@ int compareLegs(treasure* gear, explorer* person)
     return result;
 }
 
+/**
+ * \internal \n \n \b Implementation:
+ * Same as \ref compareHead, except the Hands slot is compared instead.
+ */
 int compareHands(treasure* gear, explorer* person)
 {
     int result = 1;
