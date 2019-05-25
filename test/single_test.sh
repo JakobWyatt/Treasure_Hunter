@@ -1,22 +1,25 @@
 #!/bin/bash
+#run from src directory
+#args: csv, lst, txt, log
 
-valgrind --leak-check=full -v --log-file=../test/valgrind.log --error-exitcode=1 ./TreasureHunter $1 $2 &>> ../test/output.log
+make clean && make
+
+rm adventure.log
+rm ../test/output.log
+
+valgrind --leak-check=full -v --log-file=../test/valgrind1.log --error-exitcode=1 ./TreasureHunter $1 $2 &>> ../test/output.log
 if [ $? == 1 ]; then
     echo "Memory error."
 fi
-valgrind --leak-check=full -v --log-file=../test/valgrind.log --error-exitcode=1 ./TreasureHunterLog $1 $2 &>> ../test/output.log
+valgrind --leak-check=full -v --log-file=../test/valgrind2.log --error-exitcode=1 ./TreasureHunterLog $1 $2 &>> ../test/output.log
 if [ $? == 1 ]; then
     echo "Memory error."
 fi
-valgrind --leak-check=full -v --log-file=../test/valgrind.log --error-exitcode=1 ./TreasureHunterAI $1 $2 &>> ../test/output.log
+valgrind --leak-check=full -v --log-file=../test/valgrind3.log --error-exitcode=1 ./TreasureHunterAI $1 $2 &>> ../test/output.log
 if [ $? == 1 ]; then
     echo "Memory error."
 fi
 
-if diff ../test/output.log $3; then 
-    echo "Unexpected stdout."
-fi
+cmp --silent ../test/output.log $3 || echo "Unexpected stdout."
 
-if diff adventure.log $4; then 
-    echo "Unexpected log."
-fi
+cmp --silent adventure.log $4 || echo "Unexpected log."
