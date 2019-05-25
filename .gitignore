@@ -12,3 +12,5 @@ report.aux
 report.log
 report.toc
 docs/
+*valgrind*
+
