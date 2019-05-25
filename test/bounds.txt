@@ -1,0 +1,6 @@
+STATUS: FAILED                                                                  
+STATUS: FAILED                                                                  
+STATUS: CORRECTED                                                               
+COINS: 0                                                                        
+MAGIC: 736                                                                      
+GEAR: 32031
