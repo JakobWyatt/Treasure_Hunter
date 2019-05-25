@@ -10,6 +10,14 @@
     \brief Contains top level main function to run the game.
 */
 
+/**
+ * \brief The entry point of the program.
+ * \param[in] argc The number of command line arguments.
+ *      The first argument is the name of the program.
+ * \param[in] argv The command line arguments.
+ * \return 0
+ * \details Implements functionality described in the assignment brief.
+ */
 int main(int argc, char* argv[])
 {
     size_t rows;
