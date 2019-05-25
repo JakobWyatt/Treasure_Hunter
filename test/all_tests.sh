@@ -11,7 +11,7 @@ bash ../test/single_test.sh ../test/bounds.csv ../test/bounds.lst \
 #Invalid file formats
 #test invalid list
 bash ../test/single_test.sh ../test/default.csv ../test/empty_list.lst \
-    ../test/default.txt ../test/default.log empty_list
+    ../test/empty_list.txt ../test/empty.log empty_list
 
 bash ../test/single_test.sh ../test/empty_map.csv ../test/default.lst \
     ../test/default.txt ../test/default.log empty_map
