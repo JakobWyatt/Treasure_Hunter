@@ -40,7 +40,7 @@ status resolveAdventure(map items, unsigned long rows, unsigned long cols, list 
  * \pre \p file must be opened in "a" mode.
  * \post The treasure in \p items is either swapped, destroyed (and deallocated), or retained.
 */
-void collectAndLog(FILE* file, map items, explorer* person, unsigned long i, unsigned long j);
+void collectAndLog(FILE* file, map items, explorer* person, long i, long j);
 
 /**
  * \brief Logs a treasure to a file, and optionally stdout.
@@ -53,7 +53,7 @@ void collectAndLog(FILE* file, map items, explorer* person, unsigned long i, uns
  * \pre \p file must be opened in "a" mode.
  * \details Define LOG to write the information to stdout as well as \p file.
 */
-void logTreasure(FILE* file, treasure x, int collect, unsigned long i, unsigned long j);
+void logTreasure(FILE* file, treasure x, int collect, long i, long j);
 
 /**
  * \brief Finds the final block after a movement is performed.
@@ -68,7 +68,7 @@ void logTreasure(FILE* file, treasure x, int collect, unsigned long i, unsigned 
  * \details Define AI to correct out of bounds movements.
 */
 status endBlock(unsigned long rows, unsigned long cols,
-    unsigned long* i, unsigned long* j, move x);
+    long* i, long* j, move x);
 
 /**
  * \brief Moves a given distance in a given direction.
@@ -78,6 +78,6 @@ status endBlock(unsigned long rows, unsigned long cols,
  * \param[in,out] j The starting x location. Exports the new x location.
  * \post Does not check if the distance is valid.
 */
-void move_dist(direction dir, unsigned long distance, unsigned long* i, unsigned long* j);
+void move_dist(direction dir, unsigned long distance, long* i, long* j);
 
 #endif
