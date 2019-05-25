@@ -216,7 +216,8 @@ void print(treasure x)
 
 /**
  * \internal \n \n \b Implementation:
- * 
+ * If \p person->head.value is less than \p gear.value,
+ * use \ref swap to swap the objects.
  */
 int compareHead(treasure* gear, explorer* person)
 {
