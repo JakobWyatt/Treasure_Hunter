@@ -16,3 +16,4 @@ docs/
 DoO_signed.pdf
 report.fdb_latexmk
 report.fls
+texput.log
