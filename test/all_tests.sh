@@ -38,7 +38,7 @@ bash ../test/single_test.sh ../test/negative_cols.csv ../test/default.lst \
     ../test/negative_cols.txt ../test/empty.log negative_cols
 
 bash ../test/single_test.sh ../test/invalid_rows.csv ../test/default.lst \
-    ../test/default.txt ../test/empty.log invalid_rows
+    ../test/invalid_rows.txt ../test/empty.log invalid_rows
 
 bash ../test/single_test.sh ../test/invalid_treasure_type.csv ../test/default.lst \
     ../test/default.txt ../test/empty.log invalid_treasure_type
