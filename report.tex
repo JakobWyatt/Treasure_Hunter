@@ -25,7 +25,61 @@
 \pagebreak
 
 \section{Purpose of Functions}
+
+\begin{lstlisting}
+void collectAndLog ( FILE ∗ file, map items, explorer ∗ person, unsigned long i, unsigned long j )
+\end{lstlisting}
+Collects the treasure at the given location. Logs this event to a file.
+\textbf{Parameters}
+\texttt{file} File to log information to.
+\texttt{items} Map containing item to collect.
+\texttt{person} Explorer to collect the item.
+\texttt{i} y location of the treasure to collect.
+\texttt{j} x location of the treasure to collect.
+\textbf{Precondition}
+file must be opened in "a" mode.
+\textbf{Postcondition}
+The treasure in items is either swapped, destroyed (and deallocated), or retained.
+\textbf{Implementation:} Switch on the type of the treasure. coin: Deallocate and increase explorer.coin by
+treasure::value. magic: Deallocate and increase explorer.magic by treasure::value. gear: Use treasure::compare
+to compare and conditionally swap the two treasures. Log with logTreasure if any deallocation or
+swapping occured.
+
+
 \section{Conversion of Input File to Coordinate System}
+\subsection{Implementation}
+The top level function to convert the input file is read\_map.
+This function opens the file, reads and validates the map size (rows and columns),
+and uses allocate\_map to allocate memory for the map.
+
+Once this is done, fill\_map is called.
+This function parses the file line by line, and reads values into the map.
+First, read\_line is called. This function reads a line of arbitrary size
+by reallocating larger buffers until the line is read in full. This means that
+the map can be as large as the user wants.
+Once the line is read, it is split into tokens using split. This function iterates
+over the provided string, finds a given delimiter (',' in this case) with strchr, and substitutes
+it will a null-terminator. It then exports an array filled with pointers to the start
+of each token. This has the effect of breaking a string up into many substrings, seperated
+by the delimiter.
+
+Once this is done, each individual token is passed to make\_treasure. This function
+uses a switch statement on the first character to determine the type of the treasure.
+Once the type is determined, the treasure is usually parsed by finding the colon character(s)
+with strchr, and either using strncpy or sscanf to parse each section.
+In the case of a gear treasure,
+the function chooseCompareFunc is used to determine which function pointer should be used
+with the given slot.
+
+\subsection{Alternate Implementation}
+
+An alternate approach would be to either use strtok, or the given tokenizer, to parse each line.
+This would mean that make\_treasure would be passed tokens one at a time, rather than splitting the entire
+string and then passing all tokens to make\_treasure. This method was not chosen, as strtok ignores repeated
+characters and is therefore unsuitable for any empty sections of the map. strtok could also be used to parse
+individual treasures, instead of using strchr.
+
+
 \section{Sample Input and Output}
 All test results are generated from the TreasureHunter binary.
 This is called with the arguments:
