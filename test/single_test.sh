@@ -2,10 +2,10 @@
 #run from src directory
 #args: csv, lst, txt, log
 
-make clean && make
-
 rm adventure.log
 rm ../test/output.log
+
+echo "Running test $5"
 
 valgrind --leak-check=full -v --log-file=../test/valgrind1_$5.log --error-exitcode=1 ./TreasureHunter $1 $2 &>> ../test/output.log
 if [ $? == 1 ]; then

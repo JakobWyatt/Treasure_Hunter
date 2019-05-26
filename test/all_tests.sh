@@ -1,5 +1,7 @@
 #!\bin\bash
 
+make clean && make
+
 #test valid files
 bash ../test/single_test.sh ../test/default.csv ../test/default.lst \
     ../test/default.txt ../test/default.log default
