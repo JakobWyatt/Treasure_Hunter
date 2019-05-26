@@ -4,6 +4,7 @@
 \usepackage{amsmath}  % for \hookrightarrow
 \usepackage{xcolor}   % for \textcolor
 \usepackage{listings}
+\usepackage{graphicx}
 
 \lstset{
   basicstyle=\ttfamily,
@@ -25,6 +26,12 @@
 \pagebreak
 
 \section{Purpose of Functions}
+
+This is the call graph of the program:
+\begin{figure}[h!]
+\label{Program Call Graph}
+\includegraphics[scale=0.5]{call_graph.pdf}
+\end{figure}
 
 \subsection{resolveAdventure}
 \begin{lstlisting}
@@ -254,6 +261,581 @@ void for_each(list x, data_func func);
 \end{enumerate}
 Repeat this until the current node is NULL.
  
+
+
+\subsection{read\_map}
+\begin{lstlisting}
+status read_map(map* read_into, long* rows, long* cols, char* filename);
+\end{lstlisting}
+
+
+  Reads in a map from a file.\\ 
+ \texttt{read\_into} Pointer to the created map.\\ 
+ \texttt{rows} The number of rows in the map.\\ 
+ \texttt{cols} The number of cols in the map.\\ 
+ \texttt{filename} The name of the file to read into.\\ 
+ \textbf{Return:} If an error occurs, returns ABORTED. Otherwise,
+     returns COMPLETE.\\ 
+ \textbf{Postcondition:}  read\_into must be deallocated with  free\_map.
+  Writes to stderr if an error has occured. Only deallocate  read\_into
+     if this function returns COMPLETE.\\ 
+ 
+ 
+ \textbf{Implementation:}
+This function performs the majority of file opening, size determination, and allocation.
+If there is an error in any of the stages listed below, perform any neccesary cleanup
+ and exit the function.
+ \begin{enumerate}
+\item Open the file in "r" mode.
+\item Read the size of the map.
+\item Allocate the map with  allocate\_map.
+\item Read values into the map with  fill\_map.
+\end{enumerate}
+ 
+
+\subsection{allocate\_map}
+\begin{lstlisting}
+map allocate_map(size_t rows, size_t cols);
+\end{lstlisting}
+
+
+  Allocates a map dynamically (on the heap).\\ 
+ \texttt{rows} The number of rows in the map.\\ 
+ \texttt{cols} The number of columns in the map.\\ 
+ \textbf{Return:} The allocated map. This is NULL if allocation failed.\\ 
+ \textbf{Postcondition:}  free\_map must be called on the returned map if it is not NULL.\\ 
+ 
+ 
+ \textbf{Implementation:}
+The map consists of an array of arrays. Allocate the top level array first.
+If this was successful, then allocate rows one at a time.
+If row allocation fails at any point, iterate backwards through the row arrays
+     that have already been allocated, and free them.
+After allocation, set the type of each map element to 'N'. This represents the
+     map having no elements, and allows deallocation to work as expected.
+ 
+
+\subsection{free\_map}
+\begin{lstlisting}
+void free_map(map x, size_t rows, size_t cols);
+\end{lstlisting}
+
+
+  Deallocates a map that has been created with  allocate\_map.\\ 
+ \texttt{x} The map to free.\\ 
+ \texttt{rows} The number of rows in the map.\\ 
+ \texttt{cols} The number of columns in the map.\\ 
+ 
+ 
+ \textbf{Implementation:}
+The only dynamically allocated element in  treasure is
+ the detail string.
+First, iterate through the map and deallocate any detail strings
+ if the type is either 'G' (gear) or 'M' (magic).
+Next, deallocate each row array.
+Finally, deallocate the column array.
+ 
+
+\subsection{fill\_map}
+\begin{lstlisting}
+status fill_map(map read_into, size_t rows, size_t cols, FILE* file);
+\end{lstlisting}
+
+
+  Fills a map with information from a csv file.\\ 
+ \texttt{read\_into} The map to read values into.\\ 
+ \texttt{rows} The number of rows in the map.\\ 
+ \texttt{cols} The number of columns in the map.\\ 
+ \texttt{file} The file to read from.\\ 
+ \textbf{Precondition:}  read\_into must be created with  allocate\_map.\\ 
+ \textbf{Precondition:}  file must be opened in "r" mode.\\ 
+ \textbf{Postcondition:}  file is not closed by this function.\\ 
+ \textbf{Return:} If an error occurs, return ABORTED. Otherwise, return COMPLETE.
+  Writes to stderr if an error occurs.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Stop reading the file as soon as incorrect formatting is encountered.
+While there are still empty map rows:
+\begin{enumerate}
+ \item Read the current line of the file with  read\_line.
+ \item Split the line with  split.
+ \item If the correct number of tokens has been read, convert each token
+     into a treasure with  make\_treasure and add it to the map.
+\end{enumerate}
+Any errors are printed to stderr.
+Strtok cannot be used for this function, as it skips repeated delimiters.
+ 
+
+\subsection{read\_line}
+\begin{lstlisting}
+char* read_line(FILE* file);
+\end{lstlisting}
+
+
+  Reads a line from a file.\\ 
+ \texttt{file} The file to read from.\\ 
+ \textbf{Return:} The line that has been read from the file.\\ 
+ \textbf{Precondition:}  file must be opened in "r" mode.\\ 
+ \textbf{Postcondition:}  free must be called on the returned string after use.\\ 
+ \textbf{Postcondition:} 
+  Reads until a newline or EOF is encountered.
+     The newline is not included in the returned string.
+     If no characters can be read, an empty string ('\\0') is returned.\\ 
+ 
+ 
+ \textbf{Implementation:}
+ read\_line attemps to read a line from a file using fgets,
+     with an initial buffer size of 100. If the last character
+     in the string has been overwritten then the buffer is
+     assumed to be too small, and a bigger buffer is allocated.
+     The file position is then returned to its state at the
+     start of the function, and reading is attempted again.
+     This process is repeated until the entire line has been read.
+Any newline characters in the string are found with strchr, and removed.
+ 
+
+\subsection{split}
+\begin{lstlisting}
+status split(char* line, char delim, char** tokens, size_t tokens_sz);
+\end{lstlisting}
+
+
+  Splits a string into tokens, seperated by the given delimiter.\\ 
+ \texttt{line} The string to split.\\ 
+ \texttt{delim} The delimiter to split the string on.\\ 
+ \texttt{tokens} An array of char*.
+     Each element in the array points to a null-terminated token string.
+     These tokens are "stored" in  line.\\ 
+ \texttt{tokens\_sz} The size of  tokens.\\ 
+ \textbf{Return:} If the amount of potential tokens in  line does not equal
+      tokens\_sz, return ABORTED. Otherwise, return COMPLETE.\\ 
+ \textbf{Postcondition:}  line should not be read after splitting.
+  The delimiter is not included in a token.
+     If multiple delimiters occur in order,
+         the corresponding tokens are empty strings.
+     The lifetime of  tokens is equal to the lifetime of  line.\\ 
+ 
+ 
+ \textbf{Implementation:}
+The gist of this function is quite simple, although the implementation
+becomes more complex as error checking is introduced.
+At its core, this algorithm:
+\begin{enumerate}
+ \item Finds the next delimiter in  line.
+ \item Assigns the location of the delimiter in  line to '\\0'.
+ \item Adds a new element to  tokens, located 1 after the delimiter.
+         This is the start of the next token.
+\end{enumerate}
+
+Now, assume that the above algorithm ends when either:
+\begin{itemize}
+ \item The end of the string has been reached.
+ \item The token array is full.
+\end{itemize}
+
+If the number of tokens is less than tokens\_sz, there are too few tokens
+in  line and the algorithm ends with status ABORTED.
+However, if the number of tokens is equal to tokens\_sz, it is not yet known
+     if all delimiters have been found or not. To resolve this, find the next
+     character that is either a delimiter or a null terminator.
+If it is a null terminator, then we have read the correct number of tokens,
+ and the algorithm ends with status COMPLETE.
+If it is a delimiter, we still have token(s) we have not read yet,
+ and the algorithm ends with status ABORTED.
+ 
+
+\subsection{print\_map}
+\begin{lstlisting}
+void print_map(map x, size_t rows, size_t cols);
+\end{lstlisting}
+
+
+  Prints a map to stdout.\\ 
+ \texttt{x} The map to print.\\ 
+ \texttt{rows} The number of rows in the map.\\ 
+ \texttt{cols} The number of columns in the map.
+  Used for debugging purposes.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Iterate through the map, printing each treasure using  print(treasure).
+Also print information about the location of the treasure (row and column).
+ 
+
+\subsection{read\_moves}
+\begin{lstlisting}
+status read_moves(list* moves, char* filename);
+\end{lstlisting}
+
+
+  Reads moves from a file into a linked list.\\ 
+ \texttt{moves} The list to read moves into.\\ 
+ \texttt{filename} The filename to read from.\\ 
+ \textbf{Return:} If the file contains incorrect formatting, return ABORTED.
+     Otherwise, return COMPLETE.\\ 
+ \textbf{Precondition:}  moves is created with  make\_list.\\ 
+ \textbf{Postcondition:}  moves must be deallocated with  free\_list, regardless
+     of the return status of this function.
+  If the file contains incorrect formatting, print a message
+     to stderr.\\ 
+ 
+ 
+ \textbf{Implementation:}
+First, open the file in "r" mode. Then, read and process each line until EOF is reached.
+The maximum valid line size is 29 characters long, as the largest valid integer representation
+in c is 22 characters long.
+(+ 5 characters for RIGHT direction, +1 character for space, +1 for null-terminator).
+Use  fgets to read a line of the file into this buffer.  parse\_movement is then
+ used to parse the line and add the movement to  moves.
+ 
+
+\subsection{parse\_movement}
+\begin{lstlisting}
+status parse_movement(list* moves, char* line);
+\end{lstlisting}
+
+
+  Parse a line of movement and add it to the list.\\ 
+ \texttt{moves} The list to read the movement into.\\ 
+ \texttt{line} The line to read from.\\ 
+ \textbf{Return:} If there is an error in the line, return ABORTED.
+     Otherwise, return COMPLETE.\\ 
+ \textbf{Precondition:}  line must be null-terminated, and must not be NULL.
+  This function modifies  moves on faliure, and therefore
+     does not have strong exception safety. If there is an error
+     in the line, a message is printed to stderr.\\ 
+ 
+ 
+ \textbf{Implementation:}
+First, allocate space for the move and add it to the end of  moves.
+Doing this early on reduces the chance memory safety is programmed incorrectly.
+Modifying  moves is okay, as strong exception safety is not guarenteed by this function.
+
+Next, check for a space in the line.
+This is the seperator between the direction and the distance.
+If there are no spaces in the line, the string is incorrectly formatted and the algorithm ends.
+
+Finally, parse the direction with  choose\_dir
+ and the distance with  sscanf, and check for errors.
+ 
+
+\subsection{choose\_dir}
+\begin{lstlisting}
+direction choose_dir(char* dir);
+\end{lstlisting}
+
+
+  Converts a string to a  direction.\\ 
+ \texttt{dir} The string describing the direction.\\ 
+ \textbf{Return:} The direction represented by  dir. If the direction is invalid,
+     return INVALID.\\ 
+ \textbf{Precondition:}  dir must be null-terminated, and must not be NULL.\\ 
+ \textbf{Postcondition:}  dir is converted to lowercase in this process.\\ 
+ 
+ 
+ \textbf{Implementation:}
+First, convert the string to lowercase.
+Next, use a simple else-if ladder to choose the correct direction.
+ 
+
+\subsection{direction\_to\_string}
+\begin{lstlisting}
+void direction_to_string(direction d, char* str);
+\end{lstlisting}
+
+
+  Converts a direction to an uppercase string.\\ 
+ \texttt{d} The direction to convert.\\ 
+ \texttt{str} The string to write the direction to.\\ 
+ \textbf{Postcondition:}  str must be able to hold at least 8 characters.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Use a simple else-if ladder to determine the direction,
+ and print the corresponding string into  str.
+Another method of implementing this would be to create an
+array linking enumerations to strings.
+ 
+
+\subsection{print\_move}
+\begin{lstlisting}
+void print_move(void* m);
+\end{lstlisting}
+
+
+  Prints a move to stdout.\\ 
+ \texttt{m} A pointer to the  move to print.
+   m is a void* so that this function is compatible with  for\_each.
+     Used for debugging purposes.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Convert the direction to a string with  direction\_to\_string,
+ and print both the direction and distance to stdout.
+ 
+
+\subsection{main}
+\begin{lstlisting}
+int main(int argc, char* argv[])
+\end{lstlisting}
+
+
+  The entry point of the program.\\ 
+ \texttt{argc} The number of command line arguments.
+     The first argument is the name of the program.\\ 
+ \texttt{argv} The command line arguments.\\ 
+ \textbf{Return:} 0
+  Implements functionality described in the assignment brief.
+ 
+
+\subsection{make\_treasure}
+\begin{lstlisting}
+status make_treasure(char* str, treasure* make);
+\end{lstlisting}
+
+
+  Parses  str to create a treasure object.\\ 
+ \texttt{str} The string to parse.\\ 
+ \texttt{make} The created treasure.\\ 
+ \textbf{Precondition:}  str must be null-terminated, and must not be NULL.\\ 
+ \textbf{Precondition:}  make must be dynamically allocated (on the heap) before calling this function.\\ 
+ \textbf{Postcondition:} If  str is empty,  make$\rightarrow$type == 'N'.\\ 
+ \textbf{Return:} If the string is invalid, return ABORTED.
+     Otherwise, return COMPLETE.
+  If the string is invalid, print an error message to stderr.
+     Negative treasure values are valid. This is so that negative effects can be impemented.
+     For example, if an explorer stumbles across a potion that ends up being a poison,
+     their magic value is reduced. Likewise, negative coins could be valid if the explorer
+     is robbed by bandits.\\ 
+ 
+ 
+ \textbf{Implementation:}
+The first character in the string is the type of  treasure.
+\begin{itemize}
+\item If the type is 'C' (coin), then read in the value of the treasure.
+\item If the type is 'M' (magic), then:
+\begin{enumerate}
+     \item Find the first colon in the string.
+     \item Copy the detail string from  str + 2 to the seperator.
+         This skips the type character, and the space after the type character.
+     \item Parse the value, located at one past the seperator to the end of  str.
+\end{enumerate}
+\item If the type is 'G' (gear), then:
+\begin{enumerate}
+     \item Find both delimiters ':' in the string.
+     \item Copy the detail string from  str + 2 to the seperator.
+     \item Find the gear slot with  chooseCompareFunc. This is located between the two seperators.
+     \item Parse the value, located at one past the second seperator to the end of  str.
+\end{enumerate}
+\item If the type is '\\0', then  str is empty and the type of treasure is 'N' (none).
+\end{itemize}
+
+\subsection{swap}
+\begin{lstlisting}
+void swap(treasure* a, treasure* b);
+\end{lstlisting}
+
+
+  Swaps two treasures.\\ 
+ \texttt{a} The first treasure to swap.\\ 
+ \texttt{b} The second treasure to swap.\\ 
+ \textbf{Precondition:}  a and  b must not be NULL.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Create a temporary variable and use it to swap the two values.
+ 
+
+\subsection{chooseCompareFunc}
+\begin{lstlisting}
+compare_func chooseCompareFunc(char* str);
+\end{lstlisting}
+
+
+  Chooses a compare function given a body part.\\ 
+ \texttt{str} The string representing a body part.\\ 
+ \textbf{Return:} A function pointer to the correct compare function.\\ 
+ \textbf{Postcondition:} If  str is invalid, return NULL.\\ 
+ 
+ 
+ \textbf{Implementation:}
+First, convert the string to lowercase.
+Next, use a simple else-if ladder to determine
+which  compare\_func to use.
+ 
+
+\subsection{slot}
+\begin{lstlisting}
+void slot(treasure x, char* str);
+\end{lstlisting}
+
+
+  Writes the textual representation of the gear slot into the string.\\ 
+ \texttt{x} The treasure containing the gear slot.\\ 
+ \texttt{str} The string to write the representation into.\\ 
+ \textbf{Precondition:}  str must be able to hold at least 6 characters.
+  If  x.type != 'G', do not modify  str.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Use a simple else-if ladder to determine which string to use,
+comparing the  x.compare function pointer.
+ 
+
+\subsection{toLowerStr}
+\begin{lstlisting}
+void toLowerStr(char* str);
+\end{lstlisting}
+
+
+  Converts the given string to lowercase.\\ 
+ \texttt{str} The string to convert to lowercase.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Iterate through the string, using  tolower to convert
+each character to lowercase.
+ 
+
+\subsection{print}
+\begin{lstlisting}
+void print(treasure x);
+\end{lstlisting}
+
+
+  Prints a treasure to stdout.\\ 
+ \texttt{x} The treasure to print.
+  Used for debugging. If  x.type == 'N',
+     do not print anything.\\ 
+ 
+ 
+ \textbf{Implementation:}
+If the type is 'N', do not print anything.
+All non-empty  treasures have types and values.
+These are printed.
+If the type is not 'C' (coin), the treasure has a detail string.
+This is printed.
+If the type is 'G' (gear), print the slot it refers to.
+     This uses  slot to convert  x.compare into a string.
+ 
+
+\subsection{compareHead}
+\begin{lstlisting}
+int compareHead(treasure* gear, explorer* person);
+\end{lstlisting}
+
+
+  Implementation of  compare\_func for the head slot.\\ 
+ 
+ 
+ \textbf{Implementation:}
+If  person$\rightarrow$head.value is less than  gear.value,
+use  swap to swap the objects.
+ 
+
+\subsection{compareChest}
+\begin{lstlisting}
+int compareChest(treasure* gear, explorer* person);
+\end{lstlisting}
+
+
+  Implementation of  compare\_func for the head slot.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Same as  compareHead, except the Chest slot is compared instead.
+ 
+
+\subsection{compareLegs}
+\begin{lstlisting}
+int compareLegs(treasure* gear, explorer* person);
+\end{lstlisting}
+
+
+  Implementation of  compare\_func for the head slot.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Same as  compareHead, except the Legs slot is compared instead.
+ 
+
+\subsection{compareHands}
+\begin{lstlisting}
+int compareHands(treasure* gear, explorer* person);
+\end{lstlisting}
+
+
+  Implementation of  compare\_func for the head slot.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Same as  compareHead, except the Hands slot is compared instead.
+ 
+
+\subsection{make\_explorer}
+\begin{lstlisting}
+explorer make_explorer();
+\end{lstlisting}
+
+
+  Creates an explorer.\\ 
+ \textbf{Return:} An explorer with no magic, coin, or gear.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Initialize magic and coin to 0.
+Initialize gear.type to 'N'.
+Initialize gear.value to -1, so that when compared
+the empty slot is always initially swapped.
+ 
+
+\subsection{free\_explorer}
+\begin{lstlisting}
+void free_explorer(explorer ex);
+\end{lstlisting}
+
+
+  Frees any memory owned by the explorer.\\ 
+ \texttt{ex} The explorer to free.\\ 
+ 
+ 
+ \textbf{Implementation:}
+If gear.type == 'G' (non-empty), free the corresponding detail string.
+ 
+
+\subsection{gear\_value}
+\begin{lstlisting}
+int gear_value(explorer ex);
+\end{lstlisting}
+
+
+  Finds the total value of all gear owned by the explorer.\\ 
+ \texttt{ex} The explorer to calculate the total value of all gear for.\\ 
+ \textbf{Return:} The total value of all gear.\\ 
+ \textbf{Precondition:}  ex must be created with  make\_explorer.\\ 
+ 
+ 
+ \textbf{Implementation:}
+If gear.type == 'G' (there is gear in that slot),
+increment the accumulator by that gear's value.
+ 
+
+\subsection{status\_text}
+\begin{lstlisting}
+void status_text(status s, char* text_rep);
+\end{lstlisting}
+
+
+  Converts the status to text.\\ 
+ \texttt{s} The status to convert.\\ 
+ \texttt{text\_rep} The location to print the status string.\\ 
+ \textbf{Precondition:}  text\_rep must be able to hold at least 10 characters.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Simple else-if ladder to read the correct string
+into  text\_rep.
 
 \section{Conversion of Input File to Coordinate System}
 \subsection{Implementation}
