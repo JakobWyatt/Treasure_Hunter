@@ -26,25 +26,234 @@
 
 \section{Purpose of Functions}
 
+\subsection{resolveAdventure}
 \begin{lstlisting}
-void collectAndLog ( FILE ∗ file, map items, explorer ∗ person, unsigned long i, unsigned long j )
+status resolveAdventure(map items, unsigned long rows, unsigned long cols, list movements, explorer* person, FILE* file);
 \end{lstlisting}
-Collects the treasure at the given location. Logs this event to a file.
-\textbf{Parameters}
-\texttt{file} File to log information to.
-\texttt{items} Map containing item to collect.
-\texttt{person} Explorer to collect the item.
-\texttt{i} y location of the treasure to collect.
-\texttt{j} x location of the treasure to collect.
-\textbf{Precondition}
-file must be opened in "a" mode.
-\textbf{Postcondition}
-The treasure in items is either swapped, destroyed (and deallocated), or retained.
-\textbf{Implementation:} Switch on the type of the treasure. coin: Deallocate and increase explorer.coin by
-treasure::value. magic: Deallocate and increase explorer.magic by treasure::value. gear: Use treasure::compare
-to compare and conditionally swap the two treasures. Log with logTreasure if any deallocation or
-swapping occured.
 
+
+ Resolve an adventure, given a map and a list of movements.\\ 
+ \texttt{items} Map containing all items.\\ 
+ \texttt{rows} Number of rows in the map.\\ 
+ \texttt{cols} Number of columns in the map.\\ 
+ \texttt{movements} Movements to be made by the explorer.\\ 
+ \texttt{person} Explorer to collect items.\\ 
+ \texttt{file} File to write logs to.\\ 
+ \textbf{Return:} SUCCESS if the adventure was sucessful,
+         CORRECTED if out of bounds movements were corrected,
+         FAILED if out of bounds movements weren't corrected.\\ 
+ \textbf{Precondition:}  file must be opened in "a" mode.\\ 
+ \textbf{Postcondition:}  items is modified when  treasure is picked up by  person.\\ 
+ \textbf{Postcondition:}  items and  movements are not deallocated by this function.
+ Define AI to correct out of bounds movements.
+         Define LOG to log movements to stdout as well as  file.\\
+ \textbf{Implementation:}
+Iterate through the list of movements, and keep track of the current location of  person.
+This is done in 2 steps:
+    \begin{enumerate}
+     \item Get the next movement from the list, and calculate the final block  person will be on after this movement.
+         This is done with  endBlock.
+     \item Travel in the direction of the movement using  moveDist until the final block is reached.
+         Treasures are collected and logged with  collectAndLog. 
+    \end{enumerate}
+ This is done until  movements is exhausted or an error status is set.
+
+
+\subsection{collectAndLog}
+\begin{lstlisting}
+void collectAndLog(FILE* file, map items, explorer* person, long i, long j);
+\end{lstlisting}
+
+
+ Collects the treasure at the given location. Logs this event to a file.\\ 
+ \texttt{file} File to log information to.\\ 
+ \texttt{items} Map containing item to collect.\\ 
+ \texttt{person} Explorer to collect the item.\\ 
+ \texttt{i} y location of the treasure to collect.\\ 
+ \texttt{j} x location of the treasure to collect.\\ 
+ \textbf{Precondition:}  file must be opened in "a" mode.\\ 
+ \textbf{Postcondition:} The treasure in items is either swapped, destroyed (and deallocated), or retained.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Switch on the type of the treasure.
+coin: Deallocate and increase  explorer.coin by  treasure.value.
+magic: Deallocate and increase  explorer.magic by  treasure.value.
+gear: Use  treasure.compare to compare and conditionally swap the two treasures.
+Log with  logTreasure if any deallocation or swapping occured.
+
+
+\subsection{logTreasure}
+\begin{lstlisting}
+void logTreasure(FILE* file, treasure x, int collect, long i, long j);
+\end{lstlisting}
+
+
+ Logs a treasure to a file, and optionally stdout.\\ 
+ \texttt{file} File to log information to.\\ 
+ \texttt{x} Treasure to log.\\ 
+ \texttt{collect} If  collect == 0, then log  x as collected.
+     Else, log it as discarded.\\ 
+ \texttt{i} y location of the treasure.\\ 
+ \texttt{j} x location of the treasure.\\ 
+ \textbf{Precondition:}  file must be opened in "a" mode.
+ Define LOG to write the information to stdout as well as  file.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Switch on  x.type, and log the treasure according to the assignment specification.
+
+
+\subsection{endBlock}
+\begin{lstlisting}
+status endBlock(unsigned long rows, unsigned long cols, long* i, long* j, move x);
+\end{lstlisting}
+
+
+ Finds the final block after a movement is performed.\\ 
+ \texttt{rows} The number of rows in the map.\\ 
+ \texttt{cols} The number of cols in the map.\\ 
+ \texttt{i} The starting y location. Exports the new y location.\\ 
+ \texttt{j} The starting x location. Exports the new x location.\\ 
+ \texttt{x} The movement direction and distance.\\ 
+ \textbf{Return:} SUCCESS if the movement was performed correctly,
+         CORRECTED if the movement was corrected,
+         FAILED if the movement is out of bounds.
+ Define AI to correct out of bounds movements.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Move the given distance with  move\_dist.
+If AI is defined, correct the location if out of bounds.
+If the distance is still out of bounds, return FAILED.
+
+
+\subsection{move\_dist}
+\begin{lstlisting}
+void move_dist(direction dir, unsigned long distance, long* i, long* j);
+\end{lstlisting}
+
+
+ Moves a given distance in a given direction.\\ 
+ \texttt{dir} The direction to move.\\ 
+ \texttt{distance} The distance to move.\\ 
+ \texttt{i} The starting y location. Exports the new y location.\\ 
+ \texttt{j} The starting x location. Exports the new x location.\\ 
+ \textbf{Postcondition:} Does not check if the distance is valid.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Depending on the direction, change the relevant coordinate.
+
+
+\subsection{insert}
+\begin{lstlisting}
+void insert(list* x, node* iter, void* data);
+\end{lstlisting}
+
+
+  Insert an element into a linked list.\\ 
+ \texttt{x} The list to insert into.\\ 
+ \texttt{iter} Insert before this element. If  iter is NULL,
+     insert at the end of the list.\\ 
+ \texttt{data} The pointer to data that will be stored by the node.\\ 
+ 
+ 
+ \textbf{Implementation:}
+ A node named new is dynamically allocated (on the heap),
+     and  data is referenced by it.
+     \begin{itemize}
+ \item If  iter == NULL, insert at the end of the list.
+    \begin{enumerate}
+     \item Node before new is  x$\rightarrow$tail.
+     \item Node after new is NULL.
+     \item  x$\rightarrow$tail is now new.
+     \item If there are currently no elements in the list,
+             set x$\rightarrow$head to new. Otherwise, link the node before
+             new to new.
+    \end{enumerate}
+ \item Otherwise, the next node is guarenteed to exist.
+    \begin{enumerate}
+     \item Node before new is  iter$\rightarrow$prev.
+     \item Node after new is iter.
+     \item  iter$\rightarrow$prev is new.
+     \item If iter$\rightarrow$prev is NULL (start of list),  x$\rightarrow$head is new.
+         Otherwise, new$\rightarrow$prev$\rightarrow$next is new.
+    \end{enumerate}
+ \end{itemize}
+
+\subsection{remove\_node}
+\begin{lstlisting}
+void remove_node(list* x, node* iter);
+\end{lstlisting}
+
+
+  Remove a node from a linked list.\\ 
+ \texttt{x} The list to remove the node from.\\ 
+ \texttt{iter} The node to remove.
+  Calls  free() on  iter.data\\ 
+ 
+ 
+ \textbf{Implementation:}
+First, free  iter$\rightarrow$data.
+If  iter is the first element in  x,
+ change the head pointer to  iter$\rightarrow$next.
+Otherwise, the previous node.next is equal to the
+ next node.
+When  iter is the final element in  x,
+ perform the algorithm above but set the tail pointer
+ and the next node.prev instead.
+ 
+
+\subsection{make\_list}
+\begin{lstlisting}
+list make_list();
+\end{lstlisting}
+
+
+  Initializes an empty list.\\ 
+ \textbf{Return:} The empty list.
+  The list struct is statically allocated (on the stack).\\ 
+ 
+ 
+ \textbf{Implementation:}
+Set head and tail to NULL.
+ 
+
+\subsection{free\_list}
+\begin{lstlisting}
+void free_list(list* x);
+\end{lstlisting}
+
+
+  Free all elements in the list.\\ 
+ \texttt{x} The list to free.
+  Calls  free() on  node.data for all nodes.\\ 
+ 
+ 
+ \textbf{Implementation:}
+Call  remove\_node on  x$\rightarrow$head until x$\rightarrow$head is NULL (list is empty).
+ 
+
+\subsection{for\_each}
+\begin{lstlisting}
+void for_each(list x, data_func func);
+\end{lstlisting}
+
+
+  Applies a function to every  node in the  list.\\ 
+ \texttt{x} The list to apply  func to.\\ 
+ \texttt{func} The function to apply to every node.
+   func is called on each  node in order.\\ 
+ 
+ 
+ \textbf{Implementation:}
+ \begin{enumerate}
+\item Apply  func to the current node, starting at  x.head.
+\item Move the current node forward.
+\end{enumerate}
+Repeat this until the current node is NULL.
+ 
 
 \section{Conversion of Input File to Coordinate System}
 \subsection{Implementation}
