@@ -58,4 +58,4 @@ bash ../test/single_test.sh ../test/too_little_colons.csv ../test/default.lst \
     ../test/too_little_colons.txt ../test/empty.log too_little_colons
 
 bash ../test/single_test.sh ../test/no_space.csv ../test/default.lst \
-    ../test/default.txt ../test/empty.log no_space_map
+    ../test/no_space_map.txt ../test/empty.log no_space_map
