@@ -1,0 +1,6 @@
+Distance must be an integer
+At line 7.
+Distance must be an integer
+At line 7.
+Distance must be an integer
+At line 7.

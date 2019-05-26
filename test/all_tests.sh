@@ -26,6 +26,12 @@ bash ../test/single_test.sh ../test/default.csv ../test/invalid_dist.lst \
 bash ../test/single_test.sh ../test/default.csv ../test/no_space.lst \
     ../test/no_space_list.txt ../test/empty.log no_space_list
 
+bash ../test/single_test.sh ../test/default.csv ../test/negative_dist.lst \
+    ../test/negative_dist.txt ../test/empty.log negative_dist
+
+bash ../test/single_test.sh ../test/default.csv ../test/floating_dist.lst \
+    ../test/floating_dist.txt ../test/empty.log floating_dist
+
 #test invalid map
 bash ../test/single_test.sh ../test/empty_map.csv ../test/default.lst \
     ../test/empty_map.txt ../test/empty.log empty_map

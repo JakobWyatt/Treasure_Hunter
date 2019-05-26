@@ -1,0 +1,6 @@
+Distance must be positive
+At line 8.
+Distance must be positive
+At line 8.
+Distance must be positive
+At line 8.

@@ -1,9 +1,6 @@
-Invalid formatting
-Distance must be an integer
+No space
 At line 5.
-Invalid formatting
-Distance must be an integer
+No space
 At line 5.
-Invalid formatting
-Distance must be an integer
+No space
 At line 5.
