@@ -54,7 +54,9 @@ status make_treasure(char* str, treasure* make)
                 /*Allocate enough memory to store the detail string. Do not check if allocation was sucessful.*/
                 *seperator1 = '\0';
                 args_read = sscanf(seperator1 + 1, "%d%n", &make->value, &chars_read);
-                if (args_read != 1 || chars_read != strlen(seperator1 + 1))
+                /*Check that we have consumed all possible characters,
+                and that there is a space in the right position. */
+                if (args_read != 1 || chars_read != strlen(seperator1 + 1) || str[1] != ' ')
                 {
                     result = ABORTED;
                 } else
@@ -91,7 +93,7 @@ status make_treasure(char* str, treasure* make)
                     /*create value*/
                     args_read = sscanf(seperator2 + 1, "%d%n", &make->value, &chars_read);
                     /*check for errors*/
-                    if (make->compare == NULL || args_read != 1 || chars_read != strlen(seperator2 + 1))
+                    if (make->compare == NULL || args_read != 1 || chars_read != strlen(seperator2 + 1) || str[1] != ' ')
                     {
                         result = ABORTED;
                     } else
