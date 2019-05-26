@@ -1,0 +1,3 @@
+Usage: ./TreasureHunter <map_file> <movement_file>
+Usage: ./TreasureHunter <map_file> <movement_file>
+Usage: ./TreasureHunter <map_file> <movement_file>

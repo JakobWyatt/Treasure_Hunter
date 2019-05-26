@@ -9,9 +9,34 @@ bash ../test/single_test.sh ../test/default.csv ../test/default.lst \
 bash ../test/single_test.sh ../test/bounds.csv ../test/bounds.lst \
     ../test/bounds.txt ../test/bounds.log bounds
 
+#Incorrect number of args
+rm adventure.log
+rm ../test/output.log
+
+echo "Running test incorrect_args"
+
+valgrind --leak-check=full -v --log-file=../test/valgrind1_$5.log --error-exitcode=1 ./TreasureHunter &>> ../test/output.log
+if [ $? == 1 ]; then
+    echo "Memory error."
+fi
+valgrind --leak-check=full -v --log-file=../test/valgrind2_$5.log --error-exitcode=1 ./TreasureHunterLog &>> ../test/output.log
+if [ $? == 1 ]; then
+    echo "Memory error."
+fi
+valgrind --leak-check=full -v --log-file=../test/valgrind3_$5.log --error-exitcode=1 ./TreasureHunterAI &>> ../test/output.log
+if [ $? == 1 ]; then
+    echo "Memory error."
+fi
+
+cmp --silent ../test/output.log ../test/incorrect_args.txt || echo "Unexpected stdout."
+
+
 #Placeholder expected outputs for now
 #Invalid file formats
 #test invalid list
+bash ../test/single_test.sh ../test/default.csv ../test/doesnt_exist.lst \
+    ../test/list_doesnt_exist.txt ../test/empty.log list_doesnt_exist
+
 bash ../test/single_test.sh ../test/default.csv ../test/empty_list.lst \
     ../test/empty_list.txt ../test/empty.log empty_list
 
@@ -33,6 +58,9 @@ bash ../test/single_test.sh ../test/default.csv ../test/floating_dist.lst \
     ../test/floating_dist.txt ../test/empty.log floating_dist
 
 #test invalid map
+bash ../test/single_test.sh ../test/doesnt_exist.csv ../test/default.lst \
+    ../test/map_doesnt_exist.txt ../test/empty.log map_doesnt_exist
+
 bash ../test/single_test.sh ../test/empty_map.csv ../test/default.lst \
     ../test/empty_map.txt ../test/empty.log empty_map
 

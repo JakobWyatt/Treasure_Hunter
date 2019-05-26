@@ -877,6 +877,17 @@ This is called with the arguments:
 \begin{lstlisting}
     ./TreasureHunter <map file> <list file>
 \end{lstlisting}
+The only exception to this is the test for incorrect number of arguments.
+This test is executed as such:
+\begin{lstlisting}
+  ./TreasureHunter
+\end{lstlisting}
+
+The expected output for this test is:
+\begin{lstlisting}
+  Usage: ./TreasureHunter <map_file> <movement_file>
+\end{lstlisting}
+
 A script to run these tests is located in test/all\_tests.sh.
 There is no user input for any test cases.
 If example output from adventure.log is not provided, it should be assumed that the binary
@@ -1037,6 +1048,26 @@ M Healing Potion:85,,M Defence Enchantment:360,
 \textbf{stderr}
 \begin{lstlisting}
 File <list file> was empty.
+\end{lstlisting}
+
+\subsection{Cannot open List file}
+\quad \textbf{Map}
+\begin{lstlisting}
+5,4
+,,C 200,
+,G Vibranium Shield:hands:990,,C 50
+M Healing Potion:85,,M Defence Enchantment:360,
+,,,
+,,G Lightsaber:hands:850,
+\end{lstlisting}
+
+\textbf{List}
+Does not exist.
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Error opening file <list file> for reading: No such file or directory
 \end{lstlisting}
 
 \subsection{Invalid Direction}
@@ -1216,6 +1247,29 @@ RIGHT 2
 \textbf{stderr}
 \begin{lstlisting}
 Incorrect formatting in <map file>, line 1: Expected positive integers <rows>,<cols>
+\end{lstlisting}
+
+\subsection{Map File does not Exist}
+
+\quad \textbf{Map}
+Does not exist.
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Error opening file <map file> for reading: No such file or directory
 \end{lstlisting}
 
 \subsection{Incorrect Rows}
