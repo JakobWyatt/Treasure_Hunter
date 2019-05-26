@@ -35,7 +35,7 @@ bash ../test/single_test.sh ../test/incorrect_cols.csv ../test/default.lst \
     ../test/incorrect_cols.txt ../test/empty.log incorrect_cols
 
 bash ../test/single_test.sh ../test/negative_cols.csv ../test/default.lst \
-    ../test/default.txt ../test/empty.log negative_cols
+    ../test/negative_cols.txt ../test/empty.log negative_cols
 
 bash ../test/single_test.sh ../test/invalid_rows.csv ../test/default.lst \
     ../test/default.txt ../test/empty.log invalid_rows
