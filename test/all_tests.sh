@@ -52,7 +52,7 @@ bash ../test/single_test.sh ../test/invalid_value.csv ../test/default.lst \
     ../test/invalid_value.txt ../test/empty.log invalid_value
 
 bash ../test/single_test.sh ../test/too_many_colons.csv ../test/default.lst \
-    ../test/default.txt ../test/empty.log too_many_colons
+    ../test/too_many_colons.txt ../test/empty.log too_many_colons
 
 bash ../test/single_test.sh ../test/too_little_colons.csv ../test/default.lst \
     ../test/default.txt ../test/empty.log too_little_colons
