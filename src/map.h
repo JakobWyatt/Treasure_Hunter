@@ -23,7 +23,7 @@
  * \details Writes to stderr if an error has occured. Only deallocate \p read_into
  *      if this function returns COMPLETE.
  */
-status read_map(map* read_into, size_t* rows, size_t* cols, char* filename);
+status read_map(map* read_into, long* rows, long* cols, char* filename);
 
 /**
  * \brief Allocates a map dynamically (on the heap).
