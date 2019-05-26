@@ -1,0 +1,38 @@
+^(.*)(\n/\*\*\n \* \\brief)
+\begin{lstlisting}\n$1\n\end{lstlisting}\n$2
+
+\* \\param\[.*?\] ([^ ]*)
+\\\\ \\texttt{$1}
+
+\* \\pre
+\\\\ \\textbf{Precondition:}
+
+\* \\post
+\\\\ \\textbf{Postcondition:}
+
+\* \\return
+\\\\ \\textbf{Return:}
+
+Implementation:
+\\\\ \\textbf{Implementation:}
+
+\* (\\brief|\\details|\\internal \\n \\n \\b )
+
+( \* )|/\*\*|\*/|\\p|\\ref
+
+(\\begin{lstlisting}\n[^ ]*) (.*?)\(
+\subsection{$2}\n$1 $2(
+
+\n ?\\\\
+\\\\ \n
+
+_
+\_
+
+->
+$\rightarrow$
+
+Numbered lists must be done manually.
+
+This can be used to find backslashes inside lstlistings. Needs to be removed manually due to limitations with vscode regex.
+(?<=\\begin{lstlisting}\n.*)\\
