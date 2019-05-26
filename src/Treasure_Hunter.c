@@ -20,8 +20,8 @@
  */
 int main(int argc, char* argv[])
 {
-    size_t rows;
-    size_t cols;
+    long rows;
+    long cols;
     map x;
     list y;
     status map_result;
