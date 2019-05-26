@@ -32,7 +32,7 @@ bash ../test/single_test.sh ../test/incorrect_rows.csv ../test/default.lst \
     ../test/incorrect_rows.txt ../test/empty.log incorrect_rows
 
 bash ../test/single_test.sh ../test/incorrect_cols.csv ../test/default.lst \
-    ../test/default.txt ../test/empty.log incorrect_cols
+    ../test/incorrect_cols.txt ../test/empty.log incorrect_cols
 
 bash ../test/single_test.sh ../test/negative_cols.csv ../test/default.lst \
     ../test/default.txt ../test/empty.log negative_cols
