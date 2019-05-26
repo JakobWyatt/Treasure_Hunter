@@ -1,0 +1,6 @@
+F is not a valid treasure type.
+At row 5, column 3.
+F is not a valid treasure type.
+At row 5, column 3.
+F is not a valid treasure type.
+At row 5, column 3.
