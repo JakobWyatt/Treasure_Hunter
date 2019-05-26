@@ -8,9 +8,10 @@
 
 /**
  * \internal \n \n \b Implementation:
- * This function performs the majority of file opening, size determination, and allocation.
- * If there is an error in any of the stages listed below, perform any neccesary cleanup
- *  and exit the function.
+ * This function performs the majority of file opening, size determination,
+ *      and allocation.
+ * If there is an error in any of the stages listed below, perform any
+ * neccesary cleanup and exit the function.
  * -# Open the file in "r" mode.
  * -# Read the size of the map.
  * -# Allocate the map with \ref allocate_map.
@@ -53,7 +54,8 @@ status read_map(map* read_into, long* rows, long* cols, char* filename)
         /*Cleanup file reads: check error state and close stream.*/
         if (ferror(file))
         {
-            fprintf(stderr, "Error occured while reading from %s: ", filename);
+            fprintf(stderr, "Error occured while reading from %s: ",
+                filename);
             perror("");
             result = ABORTED;
         }
@@ -65,12 +67,14 @@ status read_map(map* read_into, long* rows, long* cols, char* filename)
 
 /**
  * \internal \n \n \b Implementation:
- * The map consists of an array of arrays. Allocate the top level array first.
+ * The map consists of an array of arrays.
+ * Allocate the top level array first.
  * If this was successful, then allocate rows one at a time.
- * If row allocation fails at any point, iterate backwards through the row arrays
- *      that have already been allocated, and free them.
- * After allocation, set the type of each map element to 'N'. This represents the
- *      map having no elements, and allows deallocation to work as expected.
+ * If row allocation fails at any point, iterate backwards through the row
+ *      arrays that have already been allocated, and free them.
+ * After allocation, set the type of each map element to 'N'. This represents
+ *      the map having no elements,
+ *      and allows deallocation to work as expected.
  */
 map allocate_map(size_t rows, size_t cols)
 {
@@ -174,24 +178,31 @@ status fill_map(map read_into, size_t rows, size_t cols, FILE* file)
             while (j < cols && result == COMPLETE)
             {
                 result = make_treasure(tokens[j], read_into[i] + j);
-                /*make_treasure will print an error if formatting is incorrect.
+                /*make_treasure will print an error
+                    if formatting is incorrect.
                 However, it will not print where this error occured.*/
                 if (result != COMPLETE)
                 {
-                    fprintf(stderr, "At row %lu, column %lu.\n", (unsigned long)i + 1, (unsigned long)j + 1);
+                    fprintf(stderr, "At row %lu, column %lu.\n",
+                        (unsigned long)i + 1, (unsigned long)j + 1);
                 }
                 ++j;
             }
         } else
         {
-            /*If we have reached EOF on the file, there is an incorrect number of rows.
+            /*If we have reached EOF on the file, there is an incorrect
+                number of rows.
             Otherwise, there is an incorrect number of columns.*/
             if (feof(file))
             {
-                fprintf(stderr, "Incorrect number of rows: read %lu, expected %lu.\n", (unsigned long)i, (unsigned long)rows);
+                fprintf(stderr,
+                    "Incorrect number of rows: read %lu, expected %lu.\n",
+                    (unsigned long)i, (unsigned long)rows);
             } else
             {
-                fprintf(stderr, "Incorrect number of columns at line %lu: expected %lu.\n", (unsigned long)i + 2, (unsigned long)cols);
+                fprintf(stderr, "Incorrect number of columns at line %lu: "
+                    "expected %lu.\n", (unsigned long)i + 2,
+                    (unsigned long)cols);
             }
         }
         ++i;
@@ -272,10 +283,12 @@ char* read_line(FILE* file)
  * 
  * If the number of tokens is less than tokens_sz, there are too few tokens
  * in \p line and the algorithm ends with status ABORTED.
- * However, if the number of tokens is equal to tokens_sz, it is not yet known
- *      if all delimiters have been found or not. To resolve this, find the next
- *      character that is either a delimiter or a null terminator.
- * If it is a null terminator, then we have read the correct number of tokens,
+ * However, if the number of tokens is equal to tokens_sz, it is not yet
+ * known if all delimiters have been found or not. To resolve this,
+ *      find the next character that is either a delimiter
+ *      or a null terminator.
+ * If it is a null terminator, then we have read
+ *  the correct number of tokens,
  *  and the algorithm ends with status COMPLETE.
  * If it is a delimiter, we still have token(s) we have not read yet,
  *  and the algorithm ends with status ABORTED.
@@ -326,8 +339,10 @@ status split(char* line, char delim, char** tokens, size_t tokens_sz)
 
 /**
  * \internal \n \n \b Implementation:
- * Iterate through the map, printing each treasure using \ref print(treasure).
- * Also print information about the location of the treasure (row and column).
+ * Iterate through the map, printing each treasure using
+ *  \ref print(treasure).
+ * Also print information about the location of the treasure
+ *  (row and column).
  */
 void print_map(map x, size_t rows, size_t cols)
 {
@@ -337,7 +352,8 @@ void print_map(map x, size_t rows, size_t cols)
     {
         for (j = 0; j != cols; ++j)
         {
-            printf("\nRow: %lu. Col: %lu. Treasure: ", (unsigned long)i, (unsigned long)j);
+            printf("\nRow: %lu. Col: %lu. Treasure: ", (unsigned long)i,
+                (unsigned long)j);
             print(x[i][j]);
         }
     }

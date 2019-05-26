@@ -6,7 +6,8 @@
 
 /**
     \file movement.h
-    \brief Contains functions to read movements from a file into a linked list.
+    \brief Contains functions to read movements from a file
+        into a linked list.
 */
 
 /**
@@ -57,7 +58,8 @@ void direction_to_string(direction d, char* str);
 /**
  * \brief Prints a move to stdout.
  * \param[in] m A pointer to the \ref move to print.
- * \details \p m is a void* so that this function is compatible with \ref for_each.
+ * \details \p m is a void* so that this function is compatible with
+ *     \ref for_each.
  *      Used for debugging purposes.
  */
 void print_move(void* m);

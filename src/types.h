@@ -23,7 +23,8 @@ typedef int (*compare_func)(treasure* gear, explorer* person);
 
 /**
  * \brief Describes all possible final program statuses.
- * \details A status of higher severity will be represented as a higher number.
+ * \details A status of higher severity will be
+ *  represented as a higher number.
  */
 typedef enum
 {
@@ -41,17 +42,21 @@ typedef enum
 
 /** 
  * \brief Stores information about a treasure.
- * \details Memory should be owned by either \ref map or \ref explorer at all times.
+ * \details Memory should be owned by either \ref map or
+ *  \ref explorer at all times.
 */
 struct treasure
 {
-    /** Type can be either 'N' (None), 'G' (Gear), 'M' (Magic), 'C' (Coins). */
+    /** Type can be either 'N' (None), 'G' (Gear),
+     *  'M' (Magic), 'C' (Coins). */
     char type;
     /** The value of the treasure. Invalid for type == 'N'. */
     int value;
-    /** A function pointer to swap the gear in the correct slot. Valid iff type == 'G'. */
+    /** A function pointer to swap the gear in the correct slot.
+     *  Valid iff type == 'G'. */
     compare_func compare;
-    /** A string description of the treasure. Invalid for type == 'N' || type == 'C'. */
+    /** A string description of the treasure.
+     *  Invalid for type == 'N' || type == 'C'. */
     char* detail;
 };
 
@@ -124,7 +129,8 @@ typedef enum
 
 /**
  * \brief Stores a move action.
- * \details Used inside a linked list to show all actions to be taken by \ref explorer.
+ * \details Used inside a linked list to show all actions
+ *  to be taken by \ref explorer.
  */
 typedef struct
 {

@@ -6,19 +6,24 @@
 
 /**
  * \internal \n \n \b Implementation:
- * Iterate through the list of movements, and keep track of the current location of \p person.
+ * Iterate through the list of movements, and keep track of the current
+ *  location of \p person.
  * This is done in 2 steps:
- *      -# Get the next movement from the list, and calculate the final block \p person will be on after this movement.
+ *      -# Get the next movement from the list, and calculate the final block
+ *              \p person will be on after this movement.
  *          This is done with \ref endBlock.
- *      -# Travel in the direction of the movement using \ref moveDist until the final block is reached.
+ *      -# Travel in the direction of the movement using \ref moveDist until
+ *              the final block is reached.
  *          Treasures are collected and logged with \ref collectAndLog.\n \n
  *  This is done until \p movements is exhausted or an error status is set.
  */
-status resolveAdventure(map items, unsigned long rows, unsigned long cols, list movements, explorer* person, FILE* file)
+status resolveAdventure(map items, unsigned long rows, unsigned long cols,
+    list movements, explorer* person, FILE* file)
 {
     status result = COMPLETE;
     status temp_result = COMPLETE;
-    /*Iterate through the list of movements, keeping track of where we've been so far*/
+    /*Iterate through the list of movements, keeping track of where we've
+        been so far*/
     long end_i = 0;
     long end_j = 0;
     long i = 0;
@@ -32,7 +37,8 @@ status resolveAdventure(map items, unsigned long rows, unsigned long cols, list 
     /*First, find the final block. This is the block we will stop moving on,
     and represents the end of a single command.
     Returns corrected, failed, or success.*/
-    temp_result = endBlock(rows, cols, &end_i, &end_j, *(move*)(current->data));
+    temp_result = endBlock(rows, cols, &end_i, &end_j,
+        *(move*)(current->data));
     /*Choose the more severe result*/
     if (result < temp_result)
     {
@@ -50,7 +56,8 @@ status resolveAdventure(map items, unsigned long rows, unsigned long cols, list 
         current = current->next;
         if (current != NULL)
         {
-            temp_result = endBlock(rows, cols, &end_i, &end_j, *(move*)(current->data));
+            temp_result = endBlock(rows, cols, &end_i, &end_j,
+                *(move*)(current->data));
             if (result < temp_result)
             {
                 result = temp_result;
@@ -67,7 +74,8 @@ status resolveAdventure(map items, unsigned long rows, unsigned long cols, list 
  * Switch on the type of the treasure.
  * coin: Deallocate and increase \p explorer.coin by \ref treasure.value.
  * magic: Deallocate and increase \p explorer.magic by \ref treasure.value.
- * gear: Use \ref treasure.compare to compare and conditionally swap the two treasures.
+ * gear: Use \ref treasure.compare to compare and conditionally swap the two
+ *          treasures.
  * Log with \ref logTreasure if any deallocation or swapping occured.
  */
 void collectAndLog(FILE* file, map items, explorer* person, long i, long j)
@@ -101,7 +109,8 @@ void collectAndLog(FILE* file, map items, explorer* person, long i, long j)
 
 /**
  * \internal \n \n \b Implementation:
- * Switch on \p x.type, and log the treasure according to the assignment specification.
+ * Switch on \p x.type, and log the treasure according to the assignment
+ *  specification.
  */
 void logTreasure(FILE* file, treasure x, int collect, long i, long j)
 {
@@ -109,11 +118,13 @@ void logTreasure(FILE* file, treasure x, int collect, long i, long j)
     switch (x.type)
     {
         case 'C':
-            fprintf(file, "COLLECT<ITEM:COINS, XLOC:%lu, YLOC:%lu, VALUE:%d>\n",
+            fprintf(file, "COLLECT<ITEM:COINS, XLOC:%lu, "
+                "YLOC:%lu, VALUE:%d>\n",
                 i, j, x.value);
             break;
         case 'M':
-            fprintf(file, "COLLECT<ITEM:MAGIC, XLOC:%lu, YLOC:%lu, DESCRIPTION:%s, VALUE:%d>\n",
+            fprintf(file, "COLLECT<ITEM:MAGIC, XLOC:%lu, YLOC:%lu, "
+                "DESCRIPTION:%s, VALUE:%d>\n",
                 i, j, x.detail, x.value);
             break;
         case 'G':
@@ -125,7 +136,8 @@ void logTreasure(FILE* file, treasure x, int collect, long i, long j)
             {
                 fprintf(file, "DISCARD");
             }
-            fprintf(file, "<ITEM:GEAR, XLOC:%lu, YLOC:%lu, DESCRIPTION:%s, SLOT:%s, VALUE:%d>\n",
+            fprintf(file, "<ITEM:GEAR, XLOC:%lu, YLOC:%lu, DESCRIPTION:%s, "
+                "SLOT:%s, VALUE:%d>\n",
                     i, j, x.detail, slotStr, x.value);
             break;
     }
@@ -138,7 +150,8 @@ void logTreasure(FILE* file, treasure x, int collect, long i, long j)
                 i, j, x.value);
             break;
         case 'M':
-            printf("COLLECT<ITEM:MAGIC, XLOC:%lu, YLOC:%lu, DESCRIPTION:%s, VALUE:%d>\n",
+            printf("COLLECT<ITEM:MAGIC, XLOC:%lu, YLOC:%lu, DESCRIPTION:%s, "
+                "VALUE:%d>\n",
                 i, j, x.detail, x.value);
             break;
         case 'G':
@@ -150,7 +163,8 @@ void logTreasure(FILE* file, treasure x, int collect, long i, long j)
             {
                 printf("DISCARD");
             }
-            printf("<ITEM:GEAR, XLOC:%lu, YLOC:%lu, DESCRIPTION:%s, SLOT:%s, VALUE:%d>\n",
+            printf("<ITEM:GEAR, XLOC:%lu, YLOC:%lu, DESCRIPTION:%s, SLOT:%s,"
+                " VALUE:%d>\n",
                     i, j, x.detail, slotStr, x.value);
             break;
     }

@@ -42,10 +42,12 @@ int main(int argc, char* argv[])
         person = make_explorer();
 
         /* Ensure that file reading worked properly. */
-        if (logger != NULL && map_result == COMPLETE && list_result == COMPLETE)
+        if (logger != NULL && map_result == COMPLETE &&
+            list_result == COMPLETE)
         {
             /* Resolve the adventure and print the result. */
-            adventure_result = resolveAdventure(x, rows, cols, y, &person, logger);
+            adventure_result = resolveAdventure(x, rows, cols, y,
+                &person, logger);
             status_text(adventure_result, final_status);
             printf("STATUS: %s\n", final_status);
             if (adventure_result != FAILED && adventure_result != ABORTED)
@@ -62,7 +64,8 @@ int main(int argc, char* argv[])
         }
         if (ferror(logger))
         {
-            fprintf(stderr, "An error occured while writing to the log file.\n");
+            fprintf(stderr,
+                "An error occured while writing to the log file.\n");
         }
         if (logger != NULL)
         {

@@ -13,14 +13,17 @@
  * \param[in] str The string to parse.
  * \param[out] make The created treasure.
  * \pre \p str must be null-terminated, and must not be NULL.
- * \pre \p make must be dynamically allocated (on the heap) before calling this function.
+ * \pre \p make must be dynamically allocated (on the heap) before calling
+ *      this function.
  * \post If \p str is empty, \p make->type == 'N'.
  * \return If the string is invalid, return ABORTED.
  *      Otherwise, return COMPLETE.
  * \details If the string is invalid, print an error message to stderr.
- *      Negative treasure values are valid. This is so that negative effects can be impemented.
- *      For example, if an explorer stumbles across a potion that ends up being a poison,
- *      their magic value is reduced. Likewise, negative coins could be valid if the explorer
+ *      Negative treasure values are valid. This is so that negative effects
+ *      can be impemented.
+ *      For example, if an explorer stumbles across a potion that ends up
+ *      being a poison, their magic value is reduced.
+ *      Likewise, negative coins could be valid if the explorer
  *      is robbed by bandits.
  */
 status make_treasure(char* str, treasure* make);

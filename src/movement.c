@@ -11,11 +11,14 @@
 
 /**
  * \internal \n \n \b Implementation:
- * First, open the file in "r" mode. Then, read and process each line until EOF is reached.
- * The maximum valid line size is 29 characters long, as the largest valid integer representation
- * in c is 22 characters long.
- * (+ 5 characters for RIGHT direction, +1 character for space, +1 for null-terminator).
- * Use \ref fgets to read a line of the file into this buffer. \ref parse_movement is then
+ * First, open the file in "r" mode. Then, read and process each line until
+ *  EOF is reached.
+ * The maximum valid line size is 29 characters long, as the largest valid
+ *  integer representation in c is 22 characters long.
+ * (+ 5 characters for RIGHT direction, +1 character for space,
+ *  +1 for null-terminator).
+ * Use \ref fgets to read a line of the file into this buffer.
+ *  \ref parse_movement is then
  *  used to parse the line and add the movement to \p moves.
  */
 status read_moves(list* moves, char* filename)
@@ -58,7 +61,8 @@ status read_moves(list* moves, char* filename)
         /*Cleanup file reads: check error state and close stream.*/
         if (ferror(file))
         {
-            fprintf(stderr, "Error occured while reading from %s: ", filename);
+            fprintf(stderr, "Error occured while reading from %s: ",
+                filename);
             perror("");
             result = ABORTED;
         }
@@ -72,12 +76,15 @@ status read_moves(list* moves, char* filename)
 /**
  * \internal \n \n \b Implementation:
  * First, allocate space for the move and add it to the end of \p moves.
- * Doing this early on reduces the chance memory safety is programmed incorrectly.
- * Modifying \p moves is okay, as strong exception safety is not guarenteed by this function.
+ * Doing this early on reduces the chance memory safety is
+ *  programmed incorrectly.
+ * Modifying \p moves is okay, as strong exception safety is not guarenteed
+ *  by this function.
  * 
  * Next, check for a space in the line.
  * This is the seperator between the direction and the distance.
- * If there are no spaces in the line, the string is incorrectly formatted and the algorithm ends.
+ * If there are no spaces in the line, the string is incorrectly formatted\
+ *  and the algorithm ends.
  * 
  * Finally, parse the direction with \ref choose_dir
  *  and the distance with \ref sscanf, and check for errors.
@@ -101,7 +108,8 @@ status parse_movement(list* moves, char* line)
     {
         *space = '\0';
         data->dir = choose_dir(line);
-        args_read = sscanf(space + 1, " %d %n", &data->distance, &chars_read);
+        args_read = sscanf(space + 1, " %d %n", &data->distance,
+            &chars_read);
         /*Check for errors*/
         if (args_read != 1 || chars_read != strlen(space + 1))
         {

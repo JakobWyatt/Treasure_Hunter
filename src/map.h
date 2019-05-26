@@ -20,7 +20,8 @@
  * \return If an error occurs, returns ABORTED. Otherwise,
  *      returns COMPLETE.
  * \post \p read_into must be deallocated with \ref free_map.
- * \details Writes to stderr if an error has occured. Only deallocate \p read_into
+ * \details Writes to stderr if an error has occured.
+ *      Only deallocate \p read_into
  *      if this function returns COMPLETE.
  */
 status read_map(map* read_into, long* rows, long* cols, char* filename);

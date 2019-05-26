@@ -3,7 +3,8 @@
 
 /**
     \file list.h
-    \brief Contains functions and datatypes used to create and manipulate linked lists.
+    \brief Contains functions and datatypes used to create and
+        manipulate linked lists.
  */
 
 typedef struct node_s node;
@@ -15,9 +16,10 @@ struct node_s
 {
     /** Pointer to the data. This must be dynamically allocated. */
     void* data;
-    /** Pointer to the next node. This is NULL if this is the last element. */
+    /** Pointer to the next node. This is NULL if this is the last element.*/
     node* next;
-    /** Pointer to the previous node. This is NULL if this is the first element. */
+    /** Pointer to the previous node.
+     * This is NULL if this is the first element. */
     node* prev;
 };
 

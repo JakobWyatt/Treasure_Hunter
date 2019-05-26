@@ -28,17 +28,20 @@
  * \details Define AI to correct out of bounds movements.
  *          Define LOG to log movements to stdout as well as \p file.
  */
-status resolveAdventure(map items, unsigned long rows, unsigned long cols, list movements, explorer* person, FILE* file);
+status resolveAdventure(map items, unsigned long rows, unsigned long cols,
+    list movements, explorer* person, FILE* file);
 
 /**
- * \brief Collects the treasure at the given location. Logs this event to a file.
+ * \brief Collects the treasure at the given location.
+ *      Logs this event to a file.
  * \param[in] file File to log information to.
  * \param[in,out] items Map containing item to collect.
  * \param[in,out] person Explorer to collect the item.
  * \param[in] i y location of the treasure to collect.
  * \param[in] j x location of the treasure to collect.
  * \pre \p file must be opened in "a" mode.
- * \post The treasure in \p items is either swapped, destroyed (and deallocated), or retained.
+ * \post The treasure in \p items is either swapped,
+ *      destroyed (and deallocated), or retained.
 */
 void collectAndLog(FILE* file, map items, explorer* person, long i, long j);
 
