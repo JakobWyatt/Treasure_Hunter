@@ -1,6 +1,17 @@
 \documentclass{article}
 
-\usepackage[none]{hyphenat}
+\usepackage{lmodern}  % for bold teletype font
+\usepackage{amsmath}  % for \hookrightarrow
+\usepackage{xcolor}   % for \textcolor
+\usepackage{listings}
+
+\lstset{
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  frame=single,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
 
 \title{UCP Report}
 \date{\today}
@@ -16,5 +27,675 @@
 \section{Purpose of Functions}
 \section{Conversion of Input File to Coordinate System}
 \section{Sample Input and Output}
+All test results are generated from the TreasureHunter binary.
+This is called with the arguments:
+\begin{lstlisting}
+    ./TreasureHunter <map file> <list file>
+\end{lstlisting}
+A script to run these tests is located in test/all\_tests.sh.
+There is no user input for any test cases.
+If example output from adventure.log is not provided, it should be assumed that the binary
+does not provide log file output for that test case.
+
+The TreasureHunterLog binary will produce the same output as the TreasureHunter binary,
+except any output to the log file (adventure.log) is also output to stdout. This is done
+real time; as lines are printed to the log file, the same content is printed to stdout.
+
+The TreasureHunterAI binary is assumed to produce the same output as the TreasureHunter binary,
+unless otherwise stated.
+
+\subsection{Example Input from Assignment Brief}
+\quad \textbf{Map}
+\begin{lstlisting}
+5,4
+,,C 200,
+,G Vibranium Shield:hands:990,,C 50
+M Healing Potion:85,,M Defence Enchantment:360,
+,,,
+,,G Lightsaber:hands:850,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stdout}
+\begin{lstlisting}
+STATUS: COMPLETE
+COINS: 50
+MAGIC: 445
+GEAR: 990
+\end{lstlisting}
+
+\textbf{Log file}
+\begin{lstlisting}
+---
+COLLECT<ITEM:MAGIC, XLOC:2, YLOC:0, DESCRIPTION:Healing Potion, VALUE:85>
+COLLECT<ITEM:MAGIC, XLOC:2, YLOC:2, DESCRIPTION:Defence Enchantment, VALUE:360>
+COLLECT<ITEM:GEAR, XLOC:4, YLOC:2, DESCRIPTION:Lightsaber, SLOT:hands, VALUE:850>
+COLLECT<ITEM:GEAR, XLOC:1, YLOC:1, DESCRIPTION:Vibranium Shield, SLOT:hands, VALUE:990>
+DISCARD<ITEM:GEAR, XLOC:1, YLOC:1, DESCRIPTION:Lightsaber, SLOT:hands, VALUE:850>
+COLLECT<ITEM:COINS, XLOC:1, YLOC:3, VALUE:50>
+\end{lstlisting}
+
+\subsection{Out of Bounds}
+\subsubsection{TreasureHunter}
+\quad \textbf{Map}
+\begin{lstlisting}
+7,3
+,g Thorn armour:CheST:120,C 200
+,G Vibranium Shield:hands:990,
+M Healing Potion:85,,M Defence Enchantment:360
+,m Phoenix Blood:291,
+,g IDEK_ANYMORE:heaD:21,G Lightsaber:hAnDs:850
+c 350,g Crimson Plate:cHeSt:1020,
+,G Infinity Pants:leGS:30000,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+LEFt 3
+RIGHT 1
+down 2
+LEfT 5
+RIGHT 20
+left 1
+DOWN 100
+UP 2000
+\end{lstlisting}
+\pagebreak
+
+\textbf{stdout}
+\begin{lstlisting}
+STATUS: FAILED
+\end{lstlisting}
+
+\textbf{Log file}
+\begin{lstlisting}
+---
+\end{lstlisting}
+
+\subsubsection{TreasureHunterAI}
+\quad \textbf{Map}
+\begin{lstlisting}
+7,3
+,g Thorn armour:CheST:120,C 200
+,G Vibranium Shield:hands:990,
+M Healing Potion:85,,M Defence Enchantment:360
+,m Phoenix Blood:291,
+,g IDEK_ANYMORE:heaD:21,G Lightsaber:hAnDs:850
+c 350,g Crimson Plate:cHeSt:1020,
+,G Infinity Pants:leGS:30000,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+LEFt 3
+RIGHT 1
+down 2
+LEfT 5
+RIGHT 20
+left 1
+DOWN 100
+UP 2000
+\end{lstlisting}
+\pagebreak
+
+\textbf{stdout}
+\begin{lstlisting}
+STATUS: CORRECTED
+COINS: 0
+MAGIC: 736
+GEAR: 32031
+\end{lstlisting}
+
+\textbf{Log file}
+\begin{lstlisting}
+---
+COLLECT<ITEM:GEAR, XLOC:0, YLOC:1, DESCRIPTION:Thorn armour, SLOT:chest, VALUE:120>
+COLLECT<ITEM:GEAR, XLOC:1, YLOC:1, DESCRIPTION:Vibranium Shield, SLOT:hands, VALUE:990>
+COLLECT<ITEM:MAGIC, XLOC:2, YLOC:0, DESCRIPTION:Healing Potion, VALUE:85>
+COLLECT<ITEM:MAGIC, XLOC:2, YLOC:2, DESCRIPTION:Defence Enchantment, VALUE:360>
+COLLECT<ITEM:MAGIC, XLOC:3, YLOC:1, DESCRIPTION:Phoenix Blood, VALUE:291>
+COLLECT<ITEM:GEAR, XLOC:4, YLOC:1, DESCRIPTION:IDEK_ANYMORE, SLOT:head, VALUE:21>
+COLLECT<ITEM:GEAR, XLOC:5, YLOC:1, DESCRIPTION:Crimson Plate, SLOT:chest, VALUE:1020>
+DISCARD<ITEM:GEAR, XLOC:5, YLOC:1, DESCRIPTION:Thorn armour, SLOT:chest, VALUE:120>
+COLLECT<ITEM:GEAR, XLOC:6, YLOC:1, DESCRIPTION:Infinity Pants, SLOT:legs, VALUE:30000>
+\end{lstlisting}
+
+\subsection{Empty List}
+\quad \textbf{Map}
+\begin{lstlisting}
+5,4
+,,C 200,
+,G Vibranium Shield:hands:990,,C 50
+M Healing Potion:85,,M Defence Enchantment:360,
+,,,
+,,G Lightsaber:hands:850,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+File <list file> was empty.
+\end{lstlisting}
+
+\subsection{Invalid Direction}
+\quad \textbf{Map}
+\begin{lstlisting}
+5,4
+,,C 200,
+,G Vibranium Shield:hands:990,,C 50
+M Healing Potion:85,,M Defence Enchantment:360,
+,,,
+,,G Lightsaber:hands:850,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+LEFT 3
+riGhtt 1
+DOWN 2
+LEFT 5
+RIGHT 20
+NOrtH 1
+DOWN 100
+UP 2000
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Invalid direction
+At line 2.
+\end{lstlisting}
+
+\subsection{Invalid Distance}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+5,4
+,,C 200,
+,G Vibranium Shield:hands:990,,C 50
+M Healing Potion:85,,M Defence Enchantment:360,
+,,,
+,,G Lightsaber:hands:850,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn %s
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Distance must be an integer
+At line 3.
+\end{lstlisting}
+
+\subsection{No Space in List}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+5,4
+,,C 200,
+,G Vibranium Shield:hands:990,,C 50
+M Healing Potion:85,,M Defence Enchantment:360,
+,,,
+,,G Lightsaber:hands:850,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT1
+UP 3
+riGHT 0
+RIGHT 1
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+No space
+At line 5.
+\end{lstlisting}
+
+\subsection{Negative Distance}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+5,4
+,,C 200,
+,G Vibranium Shield:hands:990,,C 50
+M Healing Potion:85,,M Defence Enchantment:360,
+,,,
+,,G Lightsaber:hands:850,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT -100
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Distance must be positive
+At line 8.
+\end{lstlisting}
+
+\subsection{Floating Point Distance}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+5,4
+,,C 200,
+,G Vibranium Shield:hands:990,,C 50
+M Healing Potion:85,,M Defence Enchantment:360,
+,,,
+,,G Lightsaber:hands:850,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0.5
+RIGHT 100
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Distance must be an integer
+At line 7.
+\end{lstlisting}
+
+\subsection{Empty Map}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Incorrect formatting in <map file>, line 1: Expected positive integers <rows>,<cols>
+\end{lstlisting}
+
+\subsection{Incorrect Rows}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+7,3
+,g Thorn armour:CheST:120,C 200
+,G Vibranium Shield:hands:990,
+M Healing Potion:85,,M Defence Enchantment:360
+,m Phoenix Blood:291,
+,g IDEK_ANYMORE:heaD:21,G Lightsaber:hAnDs:850
+c 350,g Crimson Plate:cHeSt:1020,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Incorrect number of rows: read 6, expected 7.
+\end{lstlisting}
+
+\subsection{Incorrect Columns}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+7,3
+,g Thorn armour:CheST:120,C 200
+,G Vibranium Shield:hands:990,
+M Healing Potion:85,,M Defence Enchantment:360
+,m Phoenix Blood:291,
+,g IDEK_ANYMORE:heaD:21,G Lightsaber:hAnDs:850
+c 350,g Crimson Plate:cHeSt:1020
+,G Infinity Pants:leGS:30000,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Incorrect number of columns at line 7: expected 3.
+\end{lstlisting}
+
+\subsection{Negative Columns}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+7,-3
+,g Thorn armour:CheST:120,C 200
+,G Vibranium Shield:hands:990,
+M Healing Potion:85,,M Defence Enchantment:360
+,m Phoenix Blood:291,
+,g IDEK_ANYMORE:heaD:21,G Lightsaber:hAnDs:850
+c 350,g Crimson Plate:cHeSt:1020,
+,G Infinity Pants:leGS:30000,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Incorrect formatting in <map file>, line 1: Expected positive integers <rows>,<cols>
+\end{lstlisting}
+
+\subsection{Invalid Rows}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+7.5,3
+,g Thorn armour:CheST:120,C 200
+,G Vibranium Shield:hands:990,
+M Healing Potion:85,,M Defence Enchantment:360
+,m Phoenix Blood:291,
+,g IDEK_ANYMORE:heaD:21,G Lightsaber:hAnDs:850
+c 350,g Crimson Plate:cHeSt:1020,
+,G Infinity Pants:leGS:30000,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Incorrect formatting in <map file>, line 1: Expected positive integers <rows>,<cols>
+\end{lstlisting}
+
+\subsection{Invalid Treasure Type}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+7,3
+,g Thorn armour:CheST:120,C 200
+,G Vibranium Shield:hands:990,
+M Healing Potion:85,,M Defence Enchantment:360
+,m Phoenix Blood:291,
+,g IDEK_ANYMORE:heaD:21,f Lightsaber:hAnDs:850
+c 350,g Crimson Plate:cHeSt:1020,
+,G Infinity Pants:leGS:30000,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+F is not a valid treasure type.
+At row 5, column 3.
+\end{lstlisting}
+
+\subsection{Invalid Slot}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+7,3
+,g Thorn armour:CheST:120,C 200
+,G Vibranium Shield:hands:990,
+M Healing Potion:85,,M Defence Enchantment:360
+,m Phoenix Blood:291,
+,g IDEK_ANYMORE:heaD:21,G bow and arrows:feet:850
+c 350,g Crimson Plate:cHeSt:1020,
+,G Infinity Pants:leGS:30000,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Incorrect formatting. Gear is represented as: "G <detail>:<slot>:<value>"
+At row 5, column 3.
+\end{lstlisting}
+
+\subsection{Invalid Value}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+7,3
+,g Thorn armour:CheST:120,C 200
+,G Vibranium Shield:hands:99.5,
+M Healing Potion:85,,M Defence Enchantment:360
+,m Phoenix Blood:291,
+,g IDEK_ANYMORE:heaD:21,G Lightsaber:hAnDs:850
+c 350,g Crimson Plate:cHeSt:1020,
+,G Infinity Pants:leGS:30000,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Incorrect formatting. Gear is represented as: "G <detail>:<slot>:<value>"
+At row 2, column 2.
+\end{lstlisting}
+
+\subsection{Too Many Colons}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+7,3
+,g Thorn armour:CheST:120,C 200
+,G Vibranium Shield:hands:990,
+M Healing:Potion:85,,M Defence Enchantment:360
+,m Phoenix Blood:291,
+,g IDEK_ANYMORE:heaD:21,G Lightsaber:hAnDs:850
+c 350,g Crimson Plate:cHeSt:1020,
+,G Infinity Pants:leGS:30000,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Incorrect formatting. Magic items are represented as: "M <detail>:<value>"
+At row 3, column 1.
+\end{lstlisting}
+
+\subsection{Too Little Colons}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+7,3
+,g Thorn armour:CheST:120,C 200
+,G Vibranium Shield:hands:990,
+M Healing Potion:85,,M Defence Enchantment:360
+,m Phoenix Blood:291,
+,g IDEK_ANYMORE:heaD:21,G Lightsaber:hAnDs:850
+c 350,g Crimson Plate:cHeSt:1020,
+,G Infinity Pants leGS:30000,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Incorrect formatting. Gear is represented as: "G <detail>:<slot>:<value>"
+At row 7, column 2.
+\end{lstlisting}
+
+\subsection{No Space in Map}
+
+\quad \textbf{Map}
+\begin{lstlisting}
+7,3
+,g Thorn armour:CheST:120,C 200
+,G Vibranium Shield:hands:990,
+MHealing Potion:85,,M Defence Enchantment:360
+,m Phoenix Blood:291,
+,g IDEK_ANYMORE:heaD:21,G Lightsaber:hAnDs:850
+c 350,g Crimson Plate:cHeSt:1020,
+,G Infinity Pants:leGS:30000,
+\end{lstlisting}
+
+\textbf{List}
+\begin{lstlisting}
+DOWN 2
+RIGHT 2
+DOWn 2
+up 0
+LEFT 1
+UP 3
+riGHT 0
+RIGHT 2
+\end{lstlisting}
+\pagebreak
+
+\textbf{stderr}
+\begin{lstlisting}
+Incorrect formatting. Magic items are represented as: "M <detail>:<value>"
+At row 3, column 1.
+\end{lstlisting}
 
 \end{document}
