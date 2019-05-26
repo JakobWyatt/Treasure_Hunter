@@ -24,6 +24,7 @@ status make_treasure(char* str, treasure* make)
 {
     status result = COMPLETE;
     int args_read;
+    int chars_read;
     char* seperator1;
     char* seperator2;
     char type = '\0';
@@ -33,8 +34,8 @@ status make_treasure(char* str, treasure* make)
     switch (type)
     {
         case 'C':
-            args_read = sscanf(str, "%*c %d", &make->value);
-            if (args_read != 1)
+            args_read = sscanf(str, "%*c %d%n", &make->value, &chars_read);
+            if (args_read != 1 || chars_read != strlen(str))
             {
                 fprintf(stderr, "Incorrect formatting. Coins are represented as: \"C <value>\"\n");
                 result = ABORTED;
@@ -53,8 +54,8 @@ status make_treasure(char* str, treasure* make)
                 *seperator1 = '\0';
                 make->detail = (char*)malloc(sizeof(char) * (seperator1 - str - 1));
                 strncpy(make->detail, str + 2, seperator1 - str - 1);
-                args_read = sscanf(seperator1 + 1, "%d", &make->value);
-                if (args_read != 1)
+                args_read = sscanf(seperator1 + 1, "%d%n", &make->value, &chars_read);
+                if (args_read != 1 || chars_read != strlen(seperator1 + 1))
                 {
                     result = ABORTED;
                 }
@@ -86,9 +87,9 @@ status make_treasure(char* str, treasure* make)
                     /*create gear*/
                     make->compare = chooseCompareFunc(seperator1 + 1);
                     /*create value*/
-                    args_read = sscanf(seperator2 + 1, "%d", &make->value);
+                    args_read = sscanf(seperator2 + 1, "%d%n", &make->value, &chars_read);
                     /*check for errors*/
-                    if (make->compare == NULL || args_read != 1)
+                    if (make->compare == NULL || args_read != 1 || chars_read != strlen(seperator2 + 1))
                     {
                         result = ABORTED;
                     }
