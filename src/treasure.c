@@ -37,6 +37,7 @@ status make_treasure(char* str, treasure* make)
             args_read = sscanf(str, "%*c %d%n", &make->value, &chars_read);
             if (args_read != 1 || chars_read != strlen(str))
             {
+                make->type = 'N';
                 fprintf(stderr, "Incorrect formatting. Coins are represented as: \"C <value>\"\n");
                 result = ABORTED;
             }
@@ -52,17 +53,21 @@ status make_treasure(char* str, treasure* make)
                 /*Turn the seperator1 into a string termination character, essentially splitting the string.*/
                 /*Allocate enough memory to store the detail string. Do not check if allocation was sucessful.*/
                 *seperator1 = '\0';
-                make->detail = (char*)malloc(sizeof(char) * (seperator1 - str - 1));
-                strncpy(make->detail, str + 2, seperator1 - str - 1);
                 args_read = sscanf(seperator1 + 1, "%d%n", &make->value, &chars_read);
                 if (args_read != 1 || chars_read != strlen(seperator1 + 1))
                 {
                     result = ABORTED;
+                } else
+                {
+                    /*Only allocate if no errors will occur.*/
+                    make->detail = (char*)malloc(sizeof(char) * (seperator1 - str - 1));
+                    strncpy(make->detail, str + 2, seperator1 - str - 1);
                 }
             }
 
             if (result == ABORTED)
             {
+                make->type = 'N';
                 fprintf(stderr, "Incorrect formatting. Magic items are represented as: \"M <detail>:<value>\"\n");
             }
             break;
@@ -81,9 +86,6 @@ status make_treasure(char* str, treasure* make)
                     /*At this point, we have two pointers to both seperators*/
                     *seperator1 = '\0';
                     *seperator2 = '\0';
-                    /*create detail*/
-                    make->detail = (char*)malloc(sizeof(char) * (seperator1 - str - 1));
-                    strncpy(make->detail, str + 2, seperator1 - str - 1);
                     /*create gear*/
                     make->compare = chooseCompareFunc(seperator1 + 1);
                     /*create value*/
@@ -92,12 +94,18 @@ status make_treasure(char* str, treasure* make)
                     if (make->compare == NULL || args_read != 1 || chars_read != strlen(seperator2 + 1))
                     {
                         result = ABORTED;
+                    } else
+                    {
+                        /*create detail*/
+                        make->detail = (char*)malloc(sizeof(char) * (seperator1 - str - 1));
+                        strncpy(make->detail, str + 2, seperator1 - str - 1);
                     }
                 }
             }
 
             if (result == ABORTED)
             {
+                make->type = 'N';
                 fprintf(stderr, "Incorrect formatting. Gear is represented as: \"G <detail>:<slot>:<value>\"\n");
             }
             break;
@@ -106,6 +114,7 @@ status make_treasure(char* str, treasure* make)
             make->type = 'N';
             break;
         default:
+            make->type = 'N';
             result = ABORTED;
             fprintf(stderr, "%c is not a valid treasure type.\n", type);
     }
