@@ -87,6 +87,7 @@ status parse_movement(list* moves, char* line)
     status result = COMPLETE;
     char* space = strchr(line, ' ');
     int args_read = 0;
+    int chars_read;
 
     /*Does not check for failed allocation*/
     move* data = (move*)malloc(sizeof(move));
@@ -94,28 +95,27 @@ status parse_movement(list* moves, char* line)
 
     if (space == NULL)
     {
-        fprintf(stderr, "Invalid formatting\n");
+        fprintf(stderr, "No space\n");
         result = ABORTED;
     } else
     {
         *space = '\0';
         data->dir = choose_dir(line);
-        args_read = sscanf(space + 1, " %d ", &data->distance);
-    }
-
-    /*Check for errors*/
-    if (args_read != 1)
-    {
-        fprintf(stderr, "Distance must be an integer\n");
-        result = ABORTED;
-    } else if (data->distance < 0)
-    {
-        fprintf(stderr, "Distance must be positive\n");
-        result = ABORTED;
-    } else if (data->dir == INVALID)
-    {
-        fprintf(stderr, "Invalid direction\n");
-        result = ABORTED;
+        args_read = sscanf(space + 1, " %d %n", &data->distance, &chars_read);
+        /*Check for errors*/
+        if (args_read != 1 || chars_read != strlen(space + 1))
+        {
+            fprintf(stderr, "Distance must be an integer\n");
+            result = ABORTED;
+        } else if (data->distance < 0)
+        {
+            fprintf(stderr, "Distance must be positive\n");
+            result = ABORTED;
+        } else if (data->dir == INVALID)
+        {
+            fprintf(stderr, "Invalid direction\n");
+            result = ABORTED;
+        }
     }
 
     return result;
