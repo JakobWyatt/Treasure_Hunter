@@ -55,7 +55,7 @@ bash ../test/single_test.sh ../test/too_many_colons.csv ../test/default.lst \
     ../test/too_many_colons.txt ../test/empty.log too_many_colons
 
 bash ../test/single_test.sh ../test/too_little_colons.csv ../test/default.lst \
-    ../test/default.txt ../test/empty.log too_little_colons
+    ../test/too_little_colons.txt ../test/empty.log too_little_colons
 
 bash ../test/single_test.sh ../test/no_space.csv ../test/default.lst \
     ../test/default.txt ../test/empty.log no_space_map

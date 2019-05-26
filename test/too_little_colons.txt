@@ -1,0 +1,6 @@
+Incorrect formatting. Gear is represented as: "G <detail>:<slot>:<value>"
+At row 7, column 2.
+Incorrect formatting. Gear is represented as: "G <detail>:<slot>:<value>"
+At row 7, column 2.
+Incorrect formatting. Gear is represented as: "G <detail>:<slot>:<value>"
+At row 7, column 2.
