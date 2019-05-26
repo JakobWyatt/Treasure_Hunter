@@ -16,7 +16,7 @@
  * -# Allocate the map with \ref allocate_map.
  * -# Read values into the map with \ref fill_map.
  */
-status read_map(map* read_into, size_t* rows, size_t* cols, char* filename)
+status read_map(map* read_into, long* rows, long* cols, char* filename)
 {
     status result = COMPLETE;
     int args_read;
@@ -29,10 +29,11 @@ status read_map(map* read_into, size_t* rows, size_t* cols, char* filename)
     } else
     {
         /*Note: fscanf does not protect against integer overflow.*/
-        args_read = fscanf(file, "%lu,%lu\n", rows, cols);
-        if (args_read != 2)
+        args_read = fscanf(file, "%ld,%ld\n", rows, cols);
+        if (args_read != 2 || *rows < 0 || *cols < 0)
         {
-            fprintf(stderr, "Incorrect formatting in %s, line 1: Expected <rows>,<cols>\n", filename);
+            fprintf(stderr, "Incorrect formatting in %s, line 1: Expected "
+                "positive integers <rows>,<cols>\n", filename);
             result = ABORTED;
         } else
         {
